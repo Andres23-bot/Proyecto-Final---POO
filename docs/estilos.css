@@ -1,0 +1,82 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #cacac3;
+}
+
+/* Header */
+header {
+    background-color: #333;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+header .logo img {
+    width: 50px;
+    height: auto;
+    margin-right: 15px;
+}
+
+header h1 {
+    margin: 0;
+}
+
+/* Barra de navegación */
+nav {
+    background-color: #4CAF50;
+}
+
+.menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+.menu-item {
+    position: relative;
+}
+
+.menu-item a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    background-color: #4CAF50;
+    border: 1px solid #ccc;
+}
+
+.menu-item:hover {
+    background-color: #45a049;
+}
+
+.submenu {
+    display: none;
+    list-style-type: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #4CAF50;
+    padding: 0;
+}
+
+.submenu li a {
+    padding: 8px;
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #ccc;
+}
+
+.submenu li a:hover {
+    background-color: #45a049;
+}
+
+/* Activación de los submenús */
+.menu-item:hover .submenu {
+    display: block;
+}
