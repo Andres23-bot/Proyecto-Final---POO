@@ -8,8 +8,8 @@ body {
 
 /* Encabezado */
 header {
-    background-color: #333;
-    color: white;
+    background-color: white;
+    color: rgb(0, 0, 0);
     display: flex;
     align-items: center;
     padding: 10px;
@@ -17,9 +17,9 @@ header {
 }
 
 header .logo img {
-    width: 50px;
+    width: 70px;
     height: auto;
-    margin-right: 15px;
+    margin-right: 10px;
 }
 
 header h1 {
@@ -28,7 +28,7 @@ header h1 {
 
 /* Barra de navegación */
 nav {
-    background-color: #0056b3; /* Azul */
+    background-color: #4991dd; /* Azul */
     position: relative;
     z-index: 10; /* igual que header */
 }
@@ -51,8 +51,8 @@ nav {
     color: white;
     text-decoration: none;
     padding: 10px;
-    background-color: #0056b3;
-    border: 1px solid #ccc;
+    background-color: #3083db;
+    
 }
 
 .menu-item:hover {
@@ -92,11 +92,11 @@ nav {
 /* Imagen principal */
 .hero {
     position: relative;
-    height: 500px; /* Más alta */
+    height: 700px; /* Más alta */
     background-image: url('fondo.jpg'); /* Cambia a tu imagen */
     background-size: cover;
     background-position: center;
-    z-index: 0; /* más alto que todo */
+    z-index: 0; /* más bajo que todo */
 }
 
 .hero .overlay {
@@ -113,7 +113,20 @@ nav {
 
 .hero h2 {
     color: white;
-    font-size: 3em;
+    font-size: 10em;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+}
+
+.footer-fixed {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro */
+    color: white;
+    text-align: center;
+    padding: 8px;
+    font-size: 0.9em;
+    z-index: 50; /* Más alto que todo */
+    font-family: Arial, sans-serif;
 }
