@@ -130,3 +130,58 @@ nav {
     z-index: 50; /* Más alto que todo */
     font-family: Arial, sans-serif;
 }
+
+/* Estilo para ocultar el submenú inicialmente */
+.submenu {
+    display: none;
+    position: absolute;
+    background-color: #004aad; /* mismo color de la barra azul */
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    z-index: 1000;
+}
+
+/* Cuando el usuario pasa el mouse sobre el item del menú */
+.menu-item:hover .submenu {
+    display: block;
+}
+
+/* Opcional: estilo para enlaces del submenú */
+.submenu li a {
+    display: block;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+}
+
+.submenu li a:hover {
+    background-color: #003580;
+}
+/* Menú siempre por encima */
+header, nav {
+    position: relative;
+    z-index: 1000;
+}
+
+/* Mapa por debajo del menú */
+#map {
+    position: relative;
+    z-index: 1;
+}
+#map {
+    height: calc(100vh - 120px); /* Ajusta según el alto de tu header y nav */
+    margin-top: 0; /* No se suba encima */
+}
+#info-panel.active {
+    width: 40%;
+    padding: 20px;
+}
+
+
+
+
+
+
+
+

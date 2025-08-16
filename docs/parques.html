@@ -1,225 +1,296 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Parques Marichuela</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #ecf0f1;
-    }
+<meta charset="UTF-8" />
+<title>Parques Marichuela</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #ecf0f1;
+  }
+  /* Encabezado */
+  header {
+    display: flex;
+    align-items: center;
+    background: #2c3e50;
+    color: white;
+    padding: 10px; 
+  }
+  header .logo img {
+    height: 40px;
+    margin-right: 15px;
+  }
+  /* Menú */
+  nav {
+    background: #34495e;
+  }
+  nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  nav ul li {
+    position: relative;
+  }
+  nav ul li a, nav ul li {
+    display: block;
+    padding: 10px 15px;
+    color: white;
+    text-decoration: none;
+  }
+  nav ul li:hover {
+    background: #2c3e50;
+  }
+  .submenu {
+    display: none;
+    list-style-type: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #0056b3;
+    padding: 0;
+    z-index: 20; /* más alto que todo */
+}
 
-    /* Encabezado */
-    header {
-      display: flex;
-      align-items: center;
-      background: #2c3e50;
-      color: white;
-      padding: 10px;
-    }
-    header .logo img {
-      height: 40px;
-      margin-right: 15px;
-    }
-
-    /* Menú */
-    nav {
-      background: #34495e;
-    }
-    nav ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-    }
-    nav ul li {
-      position: relative;
-    }
-    nav ul li a, nav ul li {
-      display: block;
-      padding: 10px 15px;
-      color: white;
-      text-decoration: none;
-    }
-    nav ul li:hover {
-      background: #2c3e50;
-    }
-    nav ul .submenu {
-      display: none;
-      position: absolute;
-      background: #34495e;
-      top: 100%;
-      left: 0;
-      min-width: 180px;
-      z-index: 1000;
-    }
-    nav ul li:hover .submenu {
-      display: block;
-    }
-
-    /* Contenedor principal */
-    #content {
-      display: flex;
-      height: calc(100vh - 100px); /* resta header + nav */
-      transition: all 0.3s ease;
-    }
-
-    /* Mapa ocupa todo al inicio */
-    #map {
-      flex: 1;
-      transition: all 0.3s ease;
-    }
-
-    /* Panel de información (oculto al inicio) */
-    #info-panel {
-      width: 0;
-      padding: 0;
-      border-left: 2px solid #ccc;
-      overflow-y: auto;
-      background: #fff;
-      transition: all 0.3s ease;
-    }
-    #info-panel.active {
-      width: 40%;   /* ocupa 40% cuando está activo */
-      padding: 20px;
-    }
-    #info-panel img {
-      max-width: 100%;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
-    #info-panel h2 {
-      color: #2c3e50;
-    }
-  </style>
+.submenu li a {
+    padding: 8px;
+    background-color: #0056b3;
+    color: white;
+    border: 1px solid #ccc;
+    z-index: 20; /* más alto que todo */
+}
+  nav ul li:hover .submenu {
+    display: block;
+  }
+  /* Contenedor principal */
+  #content {
+    display: flex;
+    height: calc(100vh - 100px); /* resta header + nav */
+    transition: all 0.3s ease;
+  }
+  /* Mapa ocupa todo al inicio */
+  #map {
+    flex: 1;
+    transition: all 0.3s ease;
+  }
+  /* Panel de información (oculto al inicio) */
+  #info-panel {
+    width: 0;
+    padding: 0;
+    border-left: 2px solid #ccc;
+    overflow-y: auto;
+    background: #fff;
+    transition: all 0.3s ease;
+    position: relative; /* para que el botón se posicione dentro */
+  }
+  #info-panel.active {
+    width: 40%; /* ocupa 40% cuando está activo */
+    padding: 20px;
+  }
+  #info-panel img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  #info-panel h2 {
+    color: #2c3e50;
+  }
+  /* Botón cerrar X */
+  #info-panel .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #c0392b;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1001;
+    line-height: 24px;
+    text-align: center;
+  }
+</style>
 </head>
 <body>
+<!-- Encabezado -->
+<header>
+  <div class="logo">
+    <img src="logo.png" alt="Logo" />
+  </div>
+  <h1>Parques Marichuela</h1>
+</header>
 
-  <!-- Encabezado -->
-  <header>
-    <div class="logo">
-      <img src="logo.png" alt="Logo">
-    </div>
-    <h1>Marichuela</h1>
-  </header>
-
-  <!-- Menú -->
-  <nav>
-    <ul class="menu">
+<!-- Menú -->
+<nav>
+  <ul class="menu">
       <li class="menu-item"  id="equipamientos">Equipamientos
-        <ul class="submenu">
-          <li><a href="ubicacion.html">Ubicación</a></li>
-          <li><a href="movilidad.html">Movilidad</a></li>
-          <li><a href="parques.html">Parques</a></li>
-          <li><a href="catastro3d.html">Catastro 3D</a></li>
-          <li><a href="recorrido_virtual.html">Recorrido Virtual</a></li>
-          <li><a href="vias.html">Vías</a></li>
-        </ul>
+          <ul class="submenu">
+              <li><a href="ubicacion.html">Ubicación</a></li>
+              <li><a href="movilidad.html">Movilidad</a></li>
+              <li><a href="parques.html">Parques</a></li>
+              <li><a href="catastro3d.html">Catastro 3D</a></li>
+              <li><a href="recorrido_virtual.html">Recorrido Virtual</a></li>
+              <li><a href="vias.html">Vías</a></li>
+          </ul>
       </li>
       <li class="menu-item" id="problematicas">Problemáticas
-        <ul class="submenu">
-          <li><a href="1.html">1</a></li>
-        </ul>
+          <ul class="submenu">
+              <li><a href="1.html">1</a></li>
+          </ul>
       </li>
       <li class="menu-item" id="acerca_de">Acerca de
-        <ul class="submenu">
-          <li><a href="2.html">2</a></li>
-        </ul>
+          <ul class="submenu">
+              <li><a href="2.html">2</a></li>
+                    
+          </ul>
       </li>
-    </ul>
+        </ul>                            
   </nav>
 
-  <!-- Contenido principal: mapa + info -->
-  <div id="content">
-    <div id="map"></div>
-    <div id="info-panel"></div> <!-- 👈 empieza oculto -->
-  </div>
+<!-- Contenido principal: mapa + info -->
+<div id="content">
+  <div id="map"></div>
+  <div id="info-panel"></div>
+</div>
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script>
-    // Inicializar mapa
-    var map = L.map('map').setView([4.5, -74.1], 13);
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  // Inicializar mapa
+  var map = L.map('map').setView([4.509172124007914, -74.11865314878686], 17);
 
-    // Capa base
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap'
-    }).addTo(map);
+  // Capa base
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
 
-    // Diccionario de fotos y descripciones
-    var parqueInfo = {
-      "VALLES DE CAFÉ": {
-        foto: "valles.jpg",
-        desc: "Parque zonal con amplias zonas verdes y juegos infantiles."
+  // Diccionario de fotos y descripciones
+  var parqueInfo = {
+    "VALLES DE CAFAM": {
+      foto: "valles_cafam.jpg",
+      desc: `
+      <strong>Tipo de parque:</strong> Zonal<br>
+      <strong>Ubicación:</strong> Diagonal 92A Sur con Carrera 14I, localidad de Usme<br>
+      <strong>Administración:</strong> IDRD<br>
+      <strong>Estado de certificación:</strong> Certificado<br>
+      <strong>Área aproximada:</strong> 12,288 m²<br><br>
+      Este parque zonal se encuentra en medio del conjunto residencial Valles de Cafam, en el límite occidental del barrio Marichuela. Es un espacio amplio que ofrece zonas verdes, senderos peatonales, mobiliario urbano y áreas recreativas, y está destinado al uso de una población más amplia que los parques vecinales. Al estar administrado por el IDRD, cuenta con mantenimiento periódico y programación de actividades recreodeportivas.
+      `    
       },
-      "URBANIZACION": {
-        foto: "urbanizacion.jpg",
-        desc: "Espacio vecinal con zonas deportivas."
-      },
-      "MARICHUELA": {
-        foto: "marichuela.jpg",
-        desc: "Parque barrial rodeado de viviendas y comercio."
-      },
-      "VALLES DE CAFÉ": {
-        foto: "valles.jpg",
-        desc: "Parque zonal con amplias zonas verdes y juegos infantiles."
-      },
-      "URBANIZACION": {
-        foto: "urbanizacion.jpg",
-        desc: "Espacio vecinal con zonas deportivas."
-      },
-      "MARICHUELA": {
-        foto: "marichuela.jpg",
-        desc: "Parque barrial rodeado de viviendas y comercio."
-      },
-      "URBANIZACION": {
-        foto: "urbanizacion.jpg",
-        desc: "Espacio vecinal con zonas deportivas."
-      },
-      "MARICHUELA": {
-        foto: "marichuela.jpg",
-        desc: "Parque barrial rodeado de viviendas y comercio."
-      },
-      "URBANIZACION MARICHUELA I ETAPA": {
-        foto: "URBANIZACION.jpg",
-        desc: "Parque barrial rodeado de viviendas y comercio."
+    "LA MARICHUELA III SECTOR (CAFAM II SECTOR)": {
+      foto: "cafam 2.jpg",
+      desc: `
+        <strong>Tipo de parque:</strong> Vecinal<br>
+        <strong>Ubicación:</strong> Cerca de la Diagonal 92A Sur con Carrera 14M<br>
+        <strong>Administración:</strong> Sin dato<br>
+        <strong>Estado de certificación:</strong> Certificado<br>
+        <strong>Área aproximada:</strong> 1,407 m²<br><br>
+        Ubicado dentro del sector residencial CAFAM II, este parque vecinal brinda espacios recreativos a los habitantes de este conjunto cerrado. Aunque su tamaño es reducido, su diseño compacto permite la integración comunitaria a través de zonas verdes y de descanso.
+      `
+    },
+    "SAN MARCOS": {
+      foto: "san_marcos.jpg",
+      desc: `
+        <strong>Tipo de parque:</strong> Vecinal<br>
+        <strong>Ubicación:</strong> Sector suroriental de Marichuela, cerca de la Avenida Caracas<br>
+        <strong>Administración:</strong> Sin dato<br>
+        <strong>Estado de certificación:</strong> Sin certificar<br>
+        <strong>Área aproximada:</strong> 2,791 m²<br><br>
+        Este parque aún no se encuentra certificado, lo cual puede influir en la provisión de servicios por parte del distrito. Aun así, cumple una función importante para los residentes del sector San Marcos, especialmente para actividades informales y recreativas.
+      `
+    },
+    "MARICHUELA I ETAPA": {
+      foto: "urbanizacion.jpg",
+      desc: `
+        <strong>Tipo de parque:</strong> Vecinal<br>
+        <strong>Ubicación:</strong> Entre la Calle 75A Sur y la Carrera 14C, barrio Marichuela<br>
+        <strong>Administración:</strong> Sin dato<br>
+        <strong>Estado de certificación:</strong> Certificado<br>
+        <strong>Área aproximada:</strong> 2,918 m²<br><br>
+        Este parque está inmerso en el corazón del barrio Marichuela I Etapa. Sirve como pulmón verde y lugar de recreación para los residentes del sector. Está rodeado de viviendas y se encuentra muy cerca de la institución educativa del sector, lo cual favorece su uso por parte de niños y jóvenes.
+      `
+    },
+    "MARICHUELA - COLEGIO MIGUEL DE CERVANTES SAAVEDRA": {
+      foto: "marichuela_cancha.jpg",
+      desc: `
+        <strong>Tipo de parque:</strong> Vecinal<br>
+        <strong>Ubicación:</strong> Aledaño al IED Miguel de Cervantes Saavedra, Calle 76B Sur con Carrera 14B<br>
+        <strong>Administración:</strong> Sin dato<br>
+        <strong>Estado de certificación:</strong> Certificado<br>
+        <strong>Área aproximada:</strong> 4,002 m²<br><br>
+        Este parque vecinal se encuentra junto a la institución educativa, lo que favorece su uso escolar en jornada académica y su uso comunitario en horarios alternos. Cuenta con espacios verdes amplios y zonas recreativas que benefician tanto a la comunidad educativa como a los vecinos del sector.
+      `
+    },
+    "LA MARICHUELA - LAS PARABOLICAS": {
+      foto: "marichuela2.jpg",
+      desc: `
+        <strong>Tipo de parque:</strong> Vecinal<br>
+        <strong>Ubicación:</strong> Carrera 14Q con Calle 91 Sur (aproximadamente)<br>
+        <strong>Administración:</strong> Sin dato<br>
+        <strong>Estado de certificación:</strong> Certificado<br>
+        <strong>Área aproximada:</strong> 2,951 m²<br><br>
+        Este parque recibe su nombre por estar ubicado en la zona conocida localmente como “Las Parabólicas”. Ofrece una mezcla de cancha deportiva, espacios de encuentro y una pequeña área verde, siendo uno de los espacios más utilizados por los jóvenes del sector.
+      `
+    },
+    "MARICHUELA - PARROQUIA MANSIÓN DE PAZ": {
+      foto: "marichuela_parque.jpg",
+      desc: `
+        <strong>Tipo de parque:</strong> Vecinal<br>
+        <strong>Ubicación:</strong> Calle 81B Sur con Carrera 14F, junto a la Parroquia Mansión de Paz<br>
+        <strong>Administración:</strong> Sin dato<br>
+        <strong>Estado de certificación:</strong> Certificado<br>
+        <strong>Área aproximada:</strong> 1,795 m²<br><br>
+        Parque vecinal ubicado junto a la parroquia Mansión de Paz, rodeado de conjuntos residenciales. Cuenta con una cancha múltiple, juegos infantiles, senderos y zonas verdes, y funciona como punto de encuentro comunitario. Su cercanía a zonas comerciales y escolares lo hace muy activo durante el día.
+      `
+    }
+  };
+
+  // Función para cerrar panel
+  function cerrarPanel() {
+    var panel = document.getElementById("info-panel");
+    panel.classList.remove("active");
+    panel.innerHTML = '';
+    map.invalidateSize(); // Recalcula tamaño mapa para usar todo el espacio
+  }
+
+  // Cargar GeoJSON y agregar interactividad
+  fetch("parques1.geojson")
+  .then(res => res.json())
+  .then(data => {
+    L.geoJSON(data, {
+      style: { color: "green", weight: 2 },
+      onEachFeature: function (feature, layer) {
+        layer.on("click", function () {
+          var nombre = feature.properties.NOMBRE_PAR;
+          var info = parqueInfo[nombre] || {foto: "default.jpg", desc: "Sin descripción disponible."};
+
+          // Mostrar info en panel lateral con botón cerrar
+          var panel = document.getElementById("info-panel");
+          panel.classList.add("active");
+          panel.innerHTML = `
+            <button class="close-btn" onclick="cerrarPanel()">×</button>
+            <h2>${nombre}</h2>
+            <img src="${info.foto}" alt="${nombre}" />
+            <p>${info.desc}</p>
+          `;
+
+          // Centrar mapa en el polígono
+          map.fitBounds(layer.getBounds(), { padding: [50, 50] });
+
+          // Ajustar tamaño mapa luego de que el panel aparece
+          setTimeout(() => {
+            map.invalidateSize();
+          }, 310);
+        });
       }
-    };
-
-    // Cargar GeoJSON
-    fetch("parques1.geojson")
-      .then(res => res.json())
-      .then(data => {
-        L.geoJSON(data, {
-          style: { color: "green", weight: 2 },
-          onEachFeature: function (feature, layer) {
-            layer.on("click", function () {
-              var nombre = feature.properties.NOMBRE_PAR;
-              var info = parqueInfo[nombre] || {foto: "default.jpg", desc: "Sin descripción disponible."};
-
-              // Activar panel lateral
-              var panel = document.getElementById("info-panel");
-              panel.classList.add("active");
-              panel.innerHTML = `
-                <h2>${nombre}</h2>
-                <img src="${info.foto}" alt="${nombre}">
-                <p>${info.desc}</p>
-              `;
-
-              // Centrar mapa en el polígono
-              map.fitBounds(layer.getBounds(), {
-                padding: [50, 50]
-              });
-
-              // Corregir tamaño del mapa después de redimensionar
-              setTimeout(() => {
-                map.invalidateSize();
-              }, 310);
-            });
-          }
-        }).addTo(map);
-      });
-  </script>
+    }).addTo(map);
+  });
+</script>
 </body>
 </html>
