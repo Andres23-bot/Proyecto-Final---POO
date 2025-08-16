@@ -117,12 +117,12 @@ fetch("./historico_estaciones.geojson")
 
     document.getElementById("analisis").value =
       "📊 Tendencias y Estadísticas\n\n" +
-      "CO:\n" +
+      "Monóxido de Carbono CO:\n" +
       `  - Máximo: ${coStats.max}\n` +
       `  - Mínimo: ${coStats.min}\n` +
       `  - Promedio: ${coStats.promedio.toFixed(2)}\n` +
       `  - Desviación: ${coStats.desviacion.toFixed(2)}\n\n` +
-      "O3:\n" +
+      "Ozono O3:\n" +
       `  - Máximo: ${o3Stats.max}\n` +
       `  - Mínimo: ${o3Stats.min}\n` +
       `  - Promedio: ${o3Stats.promedio.toFixed(2)}\n` +
