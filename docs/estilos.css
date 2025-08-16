@@ -1,0 +1,48 @@
+estilos.css
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+#contenedor {
+  display: flex;
+  height: 100vh;
+}
+
+#panel-izquierdo {
+  width: 40%;
+  padding: 15px;
+  background: #f9f9f9;
+  overflow-y: auto;
+  border-right: 2px solid #ddd;
+}
+
+#panel-izquierdo h2, #panel-izquierdo h3 {
+  margin-top: 0;
+}
+
+#panel-izquierdo canvas {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 20px;
+}
+
+#analisis {
+  width: 100%;
+  height: 150px;
+  resize: none;
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-size: 14px;
+  background: #fff;
+}
+
+#panel-derecho {
+  flex: 1;
+}
+
+#mapa {
+  width: 100%;
+  height: 100%;
+}
