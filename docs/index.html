@@ -1,10 +1,59 @@
-<html lang="en">
+index.html
+
+<!DOCTYPE html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Calidad del Aire Bogotá</title>
+  <link rel="stylesheet" href="estilos.css">
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-        esta es la rama de alejandra
+  <div id="contenedor">
+    <!-- Panel izquierdo -->
+    <div id="panel-izquierdo">
+      <h2>Análisis Estadístico de la Medición de la Calidad del Aire 🌍💨</h2>
+
+      <!-- Texto explicativo jerárquicamente menor -->
+      <p class="intro">
+        En esta página se quiere mostrar un análisis estadístico de datos históricos de la calidad del aire
+        registrados por una estación de monitoreo.  
+        </p>
+        El ejercicio se realiza en <strong>JavaScript</strong>, apoyado en librerías como 
+        <em>Leaflet</em> (para la visualización geográfica en mapas interactivos) 
+        y <em>Chart.js</em> (para la representación gráfica de los contaminantes).  
+      <p class="intro">
+        Los archivos <strong>GeoJSON</strong> suministran la información histórica, donde los campos 
+        <code>contaminante</code> y <code>valor</code> son consultados y filtrados para cada mes.  
+        A partir de esos datos, el código calcula medidas estadísticas (media, máximo, mínimo, 
+        desviación estándar) y genera consultas para comparar contaminantes como CO y O₃.  
+        </p>
+
+      <canvas id="graficoCO"></canvas>
+      <canvas id="graficoO3"></canvas>
+
+              El análisis permite observar la variabilidad en la concentración de contaminantes a lo largo del mes, 
+        identificar picos de contaminación y determinar la tendencia central.  
+        Esto ayuda a comprender el comportamiento del aire en Bogotá y a establecer posibles 
+        alertas ambientales.
+      </p>
+
+      <h3>Análisis Estadístico</h3>
+      <textarea id="analisis" readonly></textarea>
+    </div>
+
+    <!-- Panel derecho -->
+    <div id="panel-derecho">
+      <div id="mapa"></div>
+    </div>
+  </div>
+
+  <script src="programa.js"></script>
 </body>
 </html>
