@@ -66,7 +66,7 @@ fetch("./historico_estaciones.geojson")
       data: {
         labels: fechas,
         datasets: [{
-          label: 'CO (ppm)',
+          label: 'Monóxido de carbono CO (ppm)',
           data: co,
           borderColor: 'blue',
           fill: false,
@@ -87,7 +87,7 @@ fetch("./historico_estaciones.geojson")
       data: {
         labels: fechas,
         datasets: [{
-          label: 'O3 (µg/m³)',
+          label: 'Ozono O3 (µg/m³)',
           data: o3,
           borderColor: 'green',
           fill: false,
