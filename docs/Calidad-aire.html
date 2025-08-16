@@ -11,46 +11,53 @@
 
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
 </head>
 <body>
   <div id="contenedor">
     <!-- Panel izquierdo -->
     <div id="panel-izquierdo">
-      <h1>Análisis Estadístico de la Medición de la Calidad del Aire 🌍💨</h1>
-      
-      <!-- Texto explicativo jerárquicamente menor -->
-      <p class="intro">
-        En esta página se quiere mostrar un análisis estadístico de datos históricos de la calidad del aire
-        registrados por una estación de monitoreo.  
-        </p>
-        El ejercicio se realiza en <strong>JavaScript</strong>, apoyado en librerías como 
-        <em>Leaflet</em> (para la visualización geográfica en mapas interactivos) 
-        y <em>Chart.js</em> (para la representación gráfica de los contaminantes).  
-      <p class="intro">
-        Los archivos <strong>GeoJSON</strong> suministran la información histórica, donde los campos 
-        <code>contaminante</code> y <code>valor</code> son consultados y filtrados para cada mes.  
-        A partir de esos datos, el código calcula medidas estadísticas (media, máximo, mínimo, 
-        desviación estándar) y genera consultas para comparar contaminantes como CO y O₃.  
-        </p>
+      <h1> Medición de la Calidad del Aire 🌍💨</h1>
+      <img src="./Imagenes-andres/IBOCA.png" width="400" height="250" class="imagen-derecha" />
 
-      <canvas id="graficoCO"></canvas>
-      <canvas id="graficoO3"></canvas>
-
-              El análisis permite observar la variabilidad en la concentración de contaminantes a lo largo del mes, 
-        identificar picos de contaminación y determinar la tendencia central.  
-        Esto ayuda a comprender el comportamiento del aire en Bogotá y a establecer posibles 
-        alertas ambientales.
+      <p class="intro">
+        En esta página se quiere mostrar un análisis estadístico de datos históricos de la calidad del aire registrados por la estación de monitoreo <strong>Usme</strong>.
+      </p>
+      <p class="intro">
+        Utilizando el <i>Índice Bogotano de Calidad del Aire y Riesgo en Salud</i> <strong>IBOCA</strong>, el cual es un instrumento que sirve para comunicar de forma articulada, sencilla y oportuna el estado de la calidad del aire, el riesgo para la salud humana por contaminación del aire y el correspondiente nivel de actuación o respuesta intersectorial.
+      </p>
+      <p class="intro"><strong>¿Cómo interpreto el IBOCA?</strong></p>
+      <p class="intro">
+        Los atributos cuantitativos del IBOCA son intervalos en unidades de concentración de los diferentes contaminantes atmosféricos que corresponden a cada franja de color o riesgo. Para el cálculo del índice:
+        <br>• <strong>PM2.5</strong> y <strong>PM10</strong>: medias móviles ponderadas <em>NowCast</em> de 12 datos horarios.
+        <br>• <strong>O3</strong> y <strong>CO</strong>: medias móviles de 8 horas.
+        <br>• <strong>NO2</strong> y <strong>SO2</strong>: valores horarios (1 h).
       </p>
 
-      <h2>Análisis Estadístico</h2>
-      <textarea id="analisis" readonly></textarea>
+      <label for="selectorFecha">📅 Selecciona Mes y Año: 👉🏼</label>
+      <select id="selectorFecha"></select>
 
-      <h2>Índice Bogotano de Calidad del Aire y Riesgo en Salud —IBOCA—</h2>
-      <img src='./Imagenes-andres/IBOCA.png' 
-           width="600" height="400" />
-           
+      <!-- Gráfica IBOCA (mantiene apariencia y franjas) -->
+      <h2>Índice IBOCA</h2>
+      <canvas id="graficoIBOCA"></canvas>
+
+      <!-- Gráfica original en µg/m³ (sin franjas) -->
+      <h2>Concentraciones en µg/m³</h2>
+      <canvas id="graficoOriginal"></canvas>
+
+      <!-- Análisis lado a lado -->
+      <div id="analisis-contenedor">
+        <div class="analisis-col">
+          <h3>📊 Análisis IBOCA</h3>
+          <textarea id="analisisIBOCA" readonly></textarea>
+        </div>
+        <div class="analisis-col">
+          <h3>📊 Análisis Concentraciones (µg/m³)</h3>
+          <textarea id="analisisOriginal" readonly></textarea>
+        </div>
+      </div>
     </div>
-   
+
     <!-- Panel derecho -->
     <div id="panel-derecho">
       <div id="mapa"></div>
