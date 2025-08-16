@@ -8,7 +8,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // --- Icono personalizado desde URL ---
 const iconoEstacion = L.icon({
-  iconUrl: './Imagenes-andres/air-station.png"',
+  iconUrl: './Imagenes-andres/air-station.png',
   iconSize: [60, 60], // tamaño del ícono
   iconAnchor: [20, 40], // punto del icono que corresponde a la coordenada
   popupAnchor: [0, -40] // posición del popup respecto al icono
@@ -16,7 +16,15 @@ const iconoEstacion = L.icon({
 
 // Marcador de subestación fijo con ícono
 const marcador = L.marker([4.531206, -74.111714], { icon: iconoEstacion }).addTo(mapa)
-  .bindPopup("📡 Subestación de Monitoreo - Usme");
+  .bindPopup(`
+    <div style="text-align:center;">
+      <h4>📡 Estación de Monitoreo de la calidad del aire</h4>
+      <img src='./Imagenes-andres/estaciones-monitoreo.jpg' 
+           alt="Estación Usme" 
+           width="300" height="150" />
+      <p>Estación de Usme</p>
+    </div>
+  `);
 
 
 // Cargar polígono de barrio
