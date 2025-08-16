@@ -1,6 +1,3 @@
-programa.js
-
-
 // --- Inicialización del mapa ---
 const mapa = L.map('mapa').setView([4.5182789301826265, -74.11642401003672], 15); // Bogotá
 
@@ -114,3 +111,4 @@ fetch("./historico_estaciones.geojson")
       `  - Promedio: ${o3Stats.promedio.toFixed(2)}\n` +
       `  - Desviación: ${o3Stats.desviacion.toFixed(2)}\n`;
   });
+
