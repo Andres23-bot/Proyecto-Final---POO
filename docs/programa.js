@@ -6,16 +6,25 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,
 }).addTo(mapa);
 
-// Marcador de subestación fijo
-const marcador = L.marker([4.531206, -74.111714]).addTo(mapa)
-  .bindPopup("Subestación de Monitoreo");
+// --- Icono personalizado desde URL ---
+const iconoEstacion = L.icon({
+  iconUrl: './Imagenes-andres/air-station.png"',
+  iconSize: [60, 60], // tamaño del ícono
+  iconAnchor: [20, 40], // punto del icono que corresponde a la coordenada
+  popupAnchor: [0, -40] // posición del popup respecto al icono
+});
+
+// Marcador de subestación fijo con ícono
+const marcador = L.marker([4.531206, -74.111714], { icon: iconoEstacion }).addTo(mapa)
+  .bindPopup("📡 Subestación de Monitoreo - Usme");
+
 
 // Cargar polígono de barrio
 fetch("./Limite_barrio_Marichuela.geojson")
   .then(res => res.json())
   .then(data => {
     L.geoJSON(data, {
-      style: { color: "blue", weight: 2, fillOpacity: 0.1 }
+      style: { color: "red", weight: 2, fillOpacity: 0.1 }
     }).addTo(mapa);
   });
 
@@ -51,7 +60,7 @@ fetch("./historico_estaciones.geojson")
         datasets: [{
           label: 'CO (ppm)',
           data: co,
-          borderColor: 'red',
+          borderColor: 'blue',
           fill: false,
           tension: 0.3
         }]
