@@ -4,10 +4,10 @@ body {
 }
 /* Franja de título */
 #franja-titulo {
-  background-color: #59bd56;   /* color de fondo (puedes cambiarlo) */
+  background-color: #779fc5;   /* color de fondo (puedes cambiarlo) */
   color: white;                /* color del texto */
   text-align: center;          /* centrado */
-  font-size: 30px;             /* tamaño del título */
+  font-size: 38px;             /* tamaño del título */
   font-weight: bold;
   padding: 12px 0;             /* espacio arriba/abajo */
   position: fixed;             /* fijo arriba */
