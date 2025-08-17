@@ -549,3 +549,17 @@ fetch("./historico_estaciones.geojson")
       actualizarGraficas(mesesDisponibles[0]);
     }
   });
+  
+  // --- Sección colapsable IBOCA ---
+const tituloIbo = document.getElementById("titulo-iboca");
+const contenidoIbo = document.getElementById("contenido-iboca");
+
+tituloIbo.addEventListener("click", () => {
+  contenidoIbo.classList.toggle("activo");
+
+  if (contenidoIbo.classList.contains("activo")) {
+    tituloIbo.innerHTML = "¿Cómo interpreto el IBOCA? ⬆️";
+  } else {
+    tituloIbo.innerHTML = "¿Cómo interpreto el IBOCA? ⬇️";
+  }
+});

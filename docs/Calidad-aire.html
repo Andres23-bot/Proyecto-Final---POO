@@ -18,23 +18,60 @@
     <!-- Panel izquierdo -->
     <div id="panel-izquierdo">
       <h1> Medición y Monitoreo de la Calidad del Aire 🔎💨</h1>
-      <img src="./Imagenes-andres/IBOCA.png" width="460" height="320" class="imagen-derecha" />
+      <img src="./Imagenes-andres/IBOCA.png" width="420" height="280" class="imagen-derecha" />
+      
+      <p class="intro">
+        Actualmente, Bogotá cuenta con una Red de Monitoreo de Calidad del Aire (RMCAB) conformada por 20 estaciones ubicadas en diferentes puntos estratégicos de la ciudad, que se encargan de vigilar las concentraciones de contaminantes. A continuación se muestran los datos históricos de la calidad del aire para el año 2022 registrados por la estación de monitoreo <strong>Usme</strong>. Esta red monitorea el material particulado de diámetro menor a 10 y 2.5 micras (PM10 y PM2.5). Adicionalmente, cuenta con la capacidad de vigilar la concentración de otros contaminantes como el ozono, los dióxidos de azufre y nitrógeno y el monóxido de carbono. En Bogotá se usa el IBOCA para la analizar estos datos.
+      </p>
+      <p class="intro">
+        <strong>La Red de Monitoreo de Bogotá  </strong>es un Sistema de Vigilancia de Calidad del Aire Tipo IV: Avanzado, que cumple con los lineamientos del Ministerio de Ambiente y Desarrollo Sostenible. Además, las estaciones las estaciones y equipos del Sistema de Vigilancia de Calidad del Aire cumplen con los estándares internacionales y aplica los procedimientos para garantizar la veracidad de los datos que se publican en tiempo real en los diferentes sitios web de la entidad.
+            </p>
+      <p class="intro">
+        <strong>IBOCA</strong>.
+      </p>
+      <p class="intro">
+        El  <strong>IBOCA </strong><i>(Índice Bogotano de Calidad del Aire y Riesgo en Salud)</i> es una herramienta que comunica de manera sencilla el estado de la calidad del aire en Bogotá, los riesgos para la salud y las acciones necesarias para reducir la exposición a la contaminación.
+            </p>
+      <p class="intro">
 
-      <p class="intro">
-        En esta página se quiere mostrar un análisis estadístico de datos históricos de la calidad del aire registrados por la estación de monitoreo <strong>Usme</strong>.
-      </p>
-      <p class="intro">
-        Utilizando el <i>Índice Bogotano de Calidad del Aire y Riesgo en Salud</i> <strong>IBOCA</strong>, el cual es un instrumento que sirve para comunicar de forma articulada, sencilla y oportuna el estado de la calidad del aire, el riesgo para la salud humana por contaminación del aire y el correspondiente nivel de actuación o respuesta intersectorial.
-      </p>
-      <p class="intro"><strong>¿Cómo interpreto el IBOCA?</strong></p>
-      <p class="intro">
-        Los atributos cuantitativos del IBOCA son intervalos en unidades de concentración de los diferentes contaminantes atmosféricos que corresponden a cada franja de color o riesgo. Para el cálculo del índice:
-        <br>• <strong>PM2.5</strong> y <strong>PM10</strong>: medias móviles ponderadas <em>NowCast</em> de 12 horas.
-        <br>• <strong>O3</strong> y <strong>CO</strong>: medias móviles de 8 horas.
-        <br>• <strong>NO2</strong> y <strong>SO2</strong>: valores horarios 1 hora.
-      </p>
 
-      <label for="selectorFecha">📅 Selecciona Mes y Año: 👉🏼</label>
+        
+      </p>
+      <!-- Sección desplegable IBOCA -->
+<p class="intro">
+  <strong id="titulo-iboca" class="toggle-titulo">¿Cómo interpreto el IBOCA? ⬇️</strong>
+</p>
+
+<div id="contenido-iboca" class="contenido-colapsable">
+      Se interpreta mediante atributos:
+      
+    <br>1️⃣ <strong>Colores:</strong> indican la calidad del aire y el riesgo en salud.
+    <br>2️⃣ <strong>Nivel de riesgo:</strong> muestra el peligro para la salud y el ambiente por contaminantes.
+    <br>3️⃣ <strong>Nivel de actuación:</strong> define las medidas que deben tomar instituciones y ciudadanía.
+    <br>4️⃣ <strong>Escala adimensional (0 a 500):</strong> representa numéricamente los niveles de riesgo.
+    <br>5️⃣ <strong>Intervalos de concentración:</strong> expresan los rangos de contaminantes (PM2.5, PM10, O3, NO2, SO2 y CO).
+  </p>
+
+  <p class="intro">
+    En síntesis, el IBOCA orienta decisiones individuales e institucionales para proteger la salud y el ambiente frente a la contaminación del aire.
+  </p>
+
+  <div style="text-align: center;">
+    <img src="./Imagenes-andres/IBOCA-TABLA.png" width="1000" height="500" />
+  </div>
+
+  <p class="intro">  
+    Los atributos cuantitativos del IBOCA son intervalos en unidades de concentración de los diferentes contaminantes atmosféricos que corresponden a cada franja de color o riesgo. 
+    </p>
+    Para el cálculo del índice:
+    <br>✳️ <strong>PM2.5</strong> y <strong>PM10</strong> <i>Material Particulado</i>: medias móviles ponderadas <em>NowCast</em> de 12 horas.
+    <br>✳️ <strong>O3</strong> y <strong>CO</strong> <i>Ozono y Monóxido de Carbono</i>: medias móviles de 8 horas.
+    <br>✳️ <strong>NO2</strong> y <strong>SO2</strong> <i>Dióxido de Nitrógeno y Dióxido de Azufre</i>: valores horarios 1 hora.
+  </p>
+</div>
+
+
+      <label for="selectorFecha"><h2> 👇🏼 Selecciona Mes y Año 📅: </h2></label>
       <select id="selectorFecha"></select>
       <p class="intro"></p>
 
