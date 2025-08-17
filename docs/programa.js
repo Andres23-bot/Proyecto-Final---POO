@@ -50,12 +50,12 @@ const colores = {
 
 // Nombres completos para mostrar en análisis
 const nombresLargos = {
-  "CO": "Monóxido de Carbono",
-  "O3": "Ozono",
-  "NO2": "Dióxido de Nitrógeno",
-  "PM10": "Material Particulado PM10",
-  "PM2.5": "Material Particulado PM2.5",
-  "SO2": "Dióxido de Azufre"
+  "CO": "CO - Monóxido de Carbono",
+  "O3": "O3 - Ozono",
+  "NO2": "NO2 - Dióxido de Nitrógeno",
+  "PM10": "PM10 - Material Particulado PM10",
+  "PM2.5": "PM2.5 - Material Particulado PM2.5",
+  "SO2": "SO2 - Dióxido de Azufre"
 };
 
 // ==========================
@@ -256,7 +256,7 @@ function construirSeriesPorMes(datosMes) {
 }
 
 // ==========================
-// Generar etiquetas y líneas
+// Generar etiquetas y líneas verticales
 // ==========================
 function generarEtiquetasYLineas(etiquetasHorarias, mesSeleccionado) {
   const [year, month] = mesSeleccionado.split('-').map(Number);
@@ -326,8 +326,8 @@ function graficarIBOCA(idCanvas, etiquetas, datos, mesSeleccionado) {
         label: c,
         data: datos[c],
         borderColor: colores[c],
-        borderWidth: 2,
-        pointRadius: 1.5,
+        borderWidth: 2,       // Grosor de la línea
+        pointRadius: 1.8,     // Tamaño de los puntos (opcional)
         fill: false,
         tension: 0.3,
         spanGaps: true
@@ -382,7 +382,7 @@ function graficarIBOCA(idCanvas, etiquetas, datos, mesSeleccionado) {
         y: {
           min: 0,
           max: 230,
-          title: { display: true, text: "Valores normalizados" }
+          title: { display: true, text: "Concentración normalizada al índice IBOCA" }
         },
         x: {
           ticks: {
@@ -410,8 +410,8 @@ function graficarOriginal(idCanvas, etiquetas, datos, mesSeleccionado) {
         label: c,
         data: datos[c],
         borderColor: colores[c],
-        borderWidth: 2,
-        pointRadius: 1.5,
+        borderWidth: 2,       //Grosor de la línea del contaminante
+        pointRadius: 1.8,     //Tamaño circulo
         fill: false,
         tension: 0.3,
         spanGaps: true
@@ -451,13 +451,15 @@ function actualizarGraficas(mesSeleccionado) {
   let analIBOCA = `Mes: ${mesSeleccionado}\n\n`;
   let analOrig  = `Mes: ${mesSeleccionado}\n\n`;
 
-  contaminantes.forEach(c => {
-    const statsI = calcularEstadisticas(iboca[c]);
-    analIBOCA += `${c}\n  - Máximo: ${statsI.max.toFixed(2)}\n  - Mínimo: ${statsI.min.toFixed(2)}\n  - Promedio: ${statsI.promedio.toFixed(2)}\n  - Desviación: ${statsI.desviacion.toFixed(2)}\n\n`;
+    contaminantes.forEach(c => {
+  const nombreLargo = nombresLargos[c] || c;
 
-    const statsO = calcularEstadisticas(original[c]);
-    analOrig += `${c}\n  - Máximo: ${statsO.max.toFixed(2)} µg/m³\n  - Mínimo: ${statsO.min.toFixed(2)} µg/m³\n  - Promedio: ${statsO.promedio.toFixed(2)} µg/m³\n  - Desviación: ${statsO.desviacion.toFixed(2)}\n\n`;
-  });
+  const statsI = calcularEstadisticas(iboca[c]);
+  analIBOCA += `${nombreLargo}\n  - Máximo: ${statsI.max.toFixed(2)}\n  - Mínimo: ${statsI.min.toFixed(2)}\n  - Promedio: ${statsI.promedio.toFixed(2)}\n  - Desviación: ${statsI.desviacion.toFixed(2)}\n\n`;
+
+  const statsO = calcularEstadisticas(original[c]);
+  analOrig += `${nombreLargo}\n  - Máximo: ${statsO.max.toFixed(2)} µg/m³\n  - Mínimo: ${statsO.min.toFixed(2)} µg/m³\n  - Promedio: ${statsO.promedio.toFixed(2)} µg/m³\n  - Desviación: ${statsO.desviacion.toFixed(2)}\n\n`;
+});
 
   document.getElementById("analisisIBOCA").value = analIBOCA.trim();
   document.getElementById("analisisOriginal").value = analOrig.trim();
