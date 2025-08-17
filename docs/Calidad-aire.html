@@ -17,8 +17,8 @@
   <div id="contenedor">
     <!-- Panel izquierdo -->
     <div id="panel-izquierdo">
-      <h1> Medición de la Calidad del Aire 🌍💨</h1>
-      <img src="./Imagenes-andres/IBOCA.png" width="400" height="250" class="imagen-derecha" />
+      <h1> Medición y Monitoreo de la Calidad del Aire 🔎💨</h1>
+      <img src="./Imagenes-andres/IBOCA.png" width="460" height="320" class="imagen-derecha" />
 
       <p class="intro">
         En esta página se quiere mostrar un análisis estadístico de datos históricos de la calidad del aire registrados por la estación de monitoreo <strong>Usme</strong>.
@@ -29,20 +29,21 @@
       <p class="intro"><strong>¿Cómo interpreto el IBOCA?</strong></p>
       <p class="intro">
         Los atributos cuantitativos del IBOCA son intervalos en unidades de concentración de los diferentes contaminantes atmosféricos que corresponden a cada franja de color o riesgo. Para el cálculo del índice:
-        <br>• <strong>PM2.5</strong> y <strong>PM10</strong>: medias móviles ponderadas <em>NowCast</em> de 12 datos horarios.
+        <br>• <strong>PM2.5</strong> y <strong>PM10</strong>: medias móviles ponderadas <em>NowCast</em> de 12 horas.
         <br>• <strong>O3</strong> y <strong>CO</strong>: medias móviles de 8 horas.
-        <br>• <strong>NO2</strong> y <strong>SO2</strong>: valores horarios (1 h).
+        <br>• <strong>NO2</strong> y <strong>SO2</strong>: valores horarios 1 hora.
       </p>
 
       <label for="selectorFecha">📅 Selecciona Mes y Año: 👉🏼</label>
       <select id="selectorFecha"></select>
+      <p class="intro"></p>
 
       <!-- Gráfica IBOCA (mantiene apariencia y franjas) -->
-      <h2>Índice IBOCA</h2>
+      <h2> 📈 Índice IBOCA</h2>
       <canvas id="graficoIBOCA"></canvas>
 
       <!-- Gráfica original en µg/m³ (sin franjas) -->
-      <h2>Concentraciones en µg/m³</h2>
+      <h2> 📈 Concentraciones en µg/m³</h2>
       <canvas id="graficoOriginal"></canvas>
 
       <!-- Análisis lado a lado -->

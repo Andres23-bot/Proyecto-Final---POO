@@ -318,7 +318,7 @@ function graficarIBOCA(idCanvas, etiquetas, datos, mesSeleccionado) {
 
   const { labels, annotations } = generarEtiquetasYLineas(etiquetas, mesSeleccionado);
 
-  charts[idCanvas] = new Chart(document.getElementById(idCanvas), {
+  const chart = new Chart(document.getElementById(idCanvas), {
     type: 'line',
     data: {
       labels: labels,
@@ -326,8 +326,8 @@ function graficarIBOCA(idCanvas, etiquetas, datos, mesSeleccionado) {
         label: c,
         data: datos[c],
         borderColor: colores[c],
-        borderWidth: 2,       // Grosor de la línea
-        pointRadius: 1.8,     // Tamaño de los puntos (opcional)
+        borderWidth: 2,
+        pointRadius: 1.8,
         fill: false,
         tension: 0.3,
         spanGaps: true
@@ -337,6 +337,27 @@ function graficarIBOCA(idCanvas, etiquetas, datos, mesSeleccionado) {
       responsive: true,
       plugins: {
         legend: { display: true },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const dataIndex = context.dataIndex;
+              const dataset = context.dataset;
+              const valor = context.formattedValue;
+              const timestamp = chart.data.originalLabels[dataIndex]; // ← Accede al timestamp real
+
+              if (!timestamp) return `${dataset.label}: ${valor}`;
+
+              const [fecha, horaFull] = timestamp.split('T');
+              const hora = horaFull ? horaFull.slice(0, 5) : '00:00'; // HH:MM
+
+              return [
+                `${dataset.label}: ${valor}`,
+                `Fecha: ${fecha}`,
+                `Hora: ${hora}`
+              ];
+            }
+          }
+        },
         annotation: {
           annotations: {
             ...annotations,
@@ -395,6 +416,10 @@ function graficarIBOCA(idCanvas, etiquetas, datos, mesSeleccionado) {
     },
     plugins: [Chart.registry.getPlugin("annotation")]
   });
+
+  // ✅ Guardar los timestamps originales para el tooltip
+  chart.data.originalLabels = etiquetas;
+  charts[idCanvas] = chart;
 }
 
 function graficarOriginal(idCanvas, etiquetas, datos, mesSeleccionado) {
@@ -402,7 +427,7 @@ function graficarOriginal(idCanvas, etiquetas, datos, mesSeleccionado) {
 
   const { labels, annotations } = generarEtiquetasYLineas(etiquetas, mesSeleccionado);
 
-  charts[idCanvas] = new Chart(document.getElementById(idCanvas), {
+  const chart = new Chart(document.getElementById(idCanvas), {
     type: 'line',
     data: {
       labels: labels,
@@ -410,8 +435,8 @@ function graficarOriginal(idCanvas, etiquetas, datos, mesSeleccionado) {
         label: c,
         data: datos[c],
         borderColor: colores[c],
-        borderWidth: 2,       //Grosor de la línea del contaminante
-        pointRadius: 1.8,     //Tamaño circulo
+        borderWidth: 2,
+        pointRadius: 1.8,
         fill: false,
         tension: 0.3,
         spanGaps: true
@@ -421,7 +446,30 @@ function graficarOriginal(idCanvas, etiquetas, datos, mesSeleccionado) {
       responsive: true,
       plugins: {
         legend: { display: true },
-        annotation: { annotations: annotations }
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const dataIndex = context.dataIndex;
+              const dataset = context.dataset;
+              const valor = context.formattedValue;
+              const timestamp = chart.data.originalLabels[dataIndex]; // ← Timestamp real
+
+              if (!timestamp) return `${dataset.label}: ${valor} µg/m³`;
+
+              const [fecha, horaFull] = timestamp.split('T');
+              const hora = horaFull ? horaFull.slice(0, 5) : '00:00'; // HH:MM
+
+              return [
+                `${dataset.label}: ${valor} µg/m³`,
+                `Fecha: ${fecha}`,
+                `Hora: ${hora}`
+              ];
+            }
+          }
+        },
+        annotation: {
+          annotations: annotations
+        }
       },
       scales: {
         y: { title: { display: true, text: "Concentración (µg/m³)" } },
@@ -436,6 +484,10 @@ function graficarOriginal(idCanvas, etiquetas, datos, mesSeleccionado) {
     },
     plugins: [Chart.registry.getPlugin("annotation")]
   });
+
+  // ✅ Guardar timestamps originales
+  chart.data.originalLabels = etiquetas;
+  charts[idCanvas] = chart;
 }
 
 // ==========================
