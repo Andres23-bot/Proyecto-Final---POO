@@ -48,6 +48,16 @@ const colores = {
   "SO2": "brown"
 };
 
+// Nombres completos para mostrar en análisis
+const nombresLargos = {
+  "CO": "Monóxido de Carbono",
+  "O3": "Ozono",
+  "NO2": "Dióxido de Nitrógeno",
+  "PM10": "Material Particulado PM10",
+  "PM2.5": "Material Particulado PM2.5",
+  "SO2": "Dióxido de Azufre"
+};
+
 // ==========================
 // Utilidades de estadística
 // ==========================
@@ -123,7 +133,6 @@ function interpolarIBOCA(contaminante, c) {
       return ((r.iMax - r.iMin) / (r.cMax - r.cMin)) * (c - r.cMin) + r.iMin;
     }
   }
-  // fuera de última banda: extrapolación simple hacia el tope
   const r = rangos[rangos.length - 1];
   if (c > r.cMax) return r.iMax;
   return null;
@@ -132,10 +141,8 @@ function interpolarIBOCA(contaminante, c) {
 // ==========================
 // Cálculos de ventanas
 // ==========================
-
-// Media móvil simple de N horas (para O3 y CO, 8h)
 function mediaMovil(valuesOrdenados, N) {
-  const res = new Map(); // time -> avg
+  const res = new Map();
   const times = Array.from(valuesOrdenados.keys()).sort();
   const window = [];
   let sum = 0;
@@ -150,21 +157,19 @@ function mediaMovil(valuesOrdenados, N) {
       sum -= x.v;
     }
     if (window.length === N) {
-      const endTime = t; // etiqueta al final de la ventana
+      const endTime = t;
       res.set(endTime, sum / N);
     } else {
       res.set(t, null);
     }
   }
-  return res; // Map con null hasta completar N
+  return res;
 }
 
-// NowCast 12 h (EPA): ponderación por variabilidad (PM2.5/PM10)
 function nowCast12(valuesOrdenados) {
   const res = new Map();
   const times = Array.from(valuesOrdenados.keys()).sort();
 
-  // helper para alpha y pesos
   function calcAlpha(slice) {
     const max = Math.max(...slice);
     const min = Math.min(...slice);
@@ -174,21 +179,20 @@ function nowCast12(valuesOrdenados) {
     return w;
   }
 
-  const queue = []; // últimas 12 horas: [{t, v}]
+  const queue = [];
   for (const t of times) {
     const v = valuesOrdenados.get(t);
     queue.push({ t, v });
 
     while (queue.length > 12) queue.shift();
 
-    if (queue.length < 3) { // hasta que haya datos razonables
+    if (queue.length < 3) {
       res.set(t, null);
       continue;
     }
 
     const slice = queue.map(x => x.v);
     const alpha = calcAlpha(slice);
-    // pesos decrecientes desde más reciente (k=0) a más antiguo (k=n-1)
     let num = 0, den = 0;
     for (let k = 0; k < slice.length; k++) {
       const w = Math.pow(alpha, k);
@@ -204,38 +208,30 @@ function nowCast12(valuesOrdenados) {
 // Construcción de series
 // ==========================
 function construirSeriesPorMes(datosMes) {
-  // Mapa por contaminante: time->valor horario (µg/m³)
   const porCont = {};
   contaminantes.forEach(c => porCont[c] = new Map());
 
-  // llenar
   datosMes.forEach(d => {
     porCont[d.contaminante].set(d.fecha_hora, d.valor);
   });
 
-  // etiquetas (todas las horas presentes en el mes)
   const todasLasHoras = Array.from(
     new Set(datosMes.map(d => d.fecha_hora))
   ).sort();
 
-  // Series originales (µg/m³) alineadas a todasLasHoras
   const original = {};
   contaminantes.forEach(c => {
     original[c] = todasLasHoras.map(ts => porCont[c].has(ts) ? porCont[c].get(ts) : null);
   });
 
-  // Series para índice (aplicando ventanas)
   const serieIBOCA = {};
   contaminantes.forEach(c => serieIBOCA[c] = new Array(todasLasHoras.length).fill(null));
 
-  // Construir mapas de ventanas
   const O3_8 = mediaMovil(porCont["O3"], 8);
   const CO_8 = mediaMovil(porCont["CO"], 8);
   const PM25_NC = nowCast12(porCont["PM2.5"]);
   const PM10_NC = nowCast12(porCont["PM10"]);
-  // NO2 y SO2: 1 h (valor directo)
 
-  // Llenar serie IBOCA por etiqueta temporal
   todasLasHoras.forEach((ts, i) => {
     const vNO2 = porCont["NO2"].get(ts);
     const vSO2 = porCont["SO2"].get(ts);
@@ -260,19 +256,78 @@ function construirSeriesPorMes(datosMes) {
 }
 
 // ==========================
-// Gráficas (dos charts)
+// Generar etiquetas y líneas
 // ==========================
-function graficarIBOCA(idCanvas, etiquetas, datos) {
+function generarEtiquetasYLineas(etiquetasHorarias, mesSeleccionado) {
+  const [year, month] = mesSeleccionado.split('-').map(Number);
+  const diasEnMes = new Date(year, month, 0).getDate(); // 28, 29, 30, 31
+
+  const labels = Array(etiquetasHorarias.length).fill(''); // vacío por defecto
+  const annotations = {};
+
+  const fechaToIndex = new Map();
+  etiquetasHorarias.forEach((ts, idx) => {
+    const fecha = ts.split('T')[0]; // YYYY-MM-DD
+    if (!fechaToIndex.has(fecha)) {
+      fechaToIndex.set(fecha, idx);
+    }
+  });
+
+  // Etiqueta una vez por día (formato DD-MM-AAAA)
+  for (let dia = 1; dia <= diasEnMes; dia++) {
+    const fechaStr = `${year}-${String(month).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+    const idx = fechaToIndex.get(fechaStr);
+    if (idx !== undefined) {
+      const [y, m, d] = fechaStr.split('-');
+      labels[idx] = `${d}-${m}-${y}`; // DD-MM-AAAA
+    }
+  }
+
+  // Línea al final de cada día (última hora disponible o 23:59)
+  for (let dia = 1; dia < diasEnMes; dia++) {
+    const fechaDia = `${year}-${String(month).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+    const fechaSiguiente = `${year}-${String(month).padStart(2, '0')}-${String(dia + 1).padStart(2, '0')}`;
+
+    // Buscar el último índice del día actual
+    const indicesDia = etiquetasHorarias
+      .map((ts, i) => ({ ts, i }))
+      .filter(item => item.ts.startsWith(fechaDia))
+      .map(item => item.i);
+
+    if (indicesDia.length > 0) {
+      const ultimoIdxDia = Math.max(...indicesDia);
+      annotations[`linea_${dia}`] = {
+        type: 'line',
+        xMin: ultimoIdxDia,
+        xMax: ultimoIdxDia,
+        borderColor: 'rgba(100, 100, 100, 0.4)',
+        borderWidth: 1.2
+        // Sin etiqueta
+      };
+    }
+  }
+
+  return { labels, annotations };
+}
+
+// ==========================
+// Gráficas
+// ==========================
+function graficarIBOCA(idCanvas, etiquetas, datos, mesSeleccionado) {
   if (charts[idCanvas]) charts[idCanvas].destroy();
+
+  const { labels, annotations } = generarEtiquetasYLineas(etiquetas, mesSeleccionado);
 
   charts[idCanvas] = new Chart(document.getElementById(idCanvas), {
     type: 'line',
     data: {
-      labels: etiquetas,
+      labels: labels,
       datasets: contaminantes.map(c => ({
         label: c,
         data: datos[c],
         borderColor: colores[c],
+        borderWidth: 2,
+        pointRadius: 1.5,
         fill: false,
         tension: 0.3,
         spanGaps: true
@@ -284,6 +339,7 @@ function graficarIBOCA(idCanvas, etiquetas, datos) {
         legend: { display: true },
         annotation: {
           annotations: {
+            ...annotations,
             verde: {
               type: "box",
               yMin: 0, yMax: 50,
@@ -314,7 +370,7 @@ function graficarIBOCA(idCanvas, etiquetas, datos) {
             },
             morado: {
               type: "box",
-              yMin: 201, yMax: 220,
+              yMin: 201, yMax: 230,
               backgroundColor: "rgba(128, 0, 128, 0.1)",
               borderColor: "purple", borderWidth: 1,
               label: { content: "Peligroso", enabled: true, position: "end" }
@@ -325,27 +381,37 @@ function graficarIBOCA(idCanvas, etiquetas, datos) {
       scales: {
         y: {
           min: 0,
-          max: 220,
-          title: { display: true, text: "Índice IBOCA - Riesgo en Salud" }
+          max: 230,
+          title: { display: true, text: "Valores normalizados" }
         },
-        x: { ticks: { maxRotation: 0, autoSkip: true, autoSkipPadding: 10 } }
+        x: {
+          ticks: {
+            maxRotation: 45,
+            minRotation: 45,
+            autoSkip: false
+          }
+        }
       }
     },
     plugins: [Chart.registry.getPlugin("annotation")]
   });
 }
 
-function graficarOriginal(idCanvas, etiquetas, datos) {
+function graficarOriginal(idCanvas, etiquetas, datos, mesSeleccionado) {
   if (charts[idCanvas]) charts[idCanvas].destroy();
+
+  const { labels, annotations } = generarEtiquetasYLineas(etiquetas, mesSeleccionado);
 
   charts[idCanvas] = new Chart(document.getElementById(idCanvas), {
     type: 'line',
     data: {
-      labels: etiquetas,
+      labels: labels,
       datasets: contaminantes.map(c => ({
         label: c,
         data: datos[c],
         borderColor: colores[c],
+        borderWidth: 2,
+        pointRadius: 1.5,
         fill: false,
         tension: 0.3,
         spanGaps: true
@@ -353,12 +419,22 @@ function graficarOriginal(idCanvas, etiquetas, datos) {
     },
     options: {
       responsive: true,
-      plugins: { legend: { display: true } },
+      plugins: {
+        legend: { display: true },
+        annotation: { annotations: annotations }
+      },
       scales: {
         y: { title: { display: true, text: "Concentración (µg/m³)" } },
-        x: { ticks: { maxRotation: 0, autoSkip: true, autoSkipPadding: 10 } }
+        x: {
+          ticks: {
+            maxRotation: 45,
+            minRotation: 45,
+            autoSkip: false
+          }
+        }
       }
-    }
+    },
+    plugins: [Chart.registry.getPlugin("annotation")]
   });
 }
 
@@ -366,17 +442,12 @@ function graficarOriginal(idCanvas, etiquetas, datos) {
 // Actualizar por selección
 // ==========================
 function actualizarGraficas(mesSeleccionado) {
-  // Filtrar por mes (sin promediar)
   const datosMes = datosUsme.filter(d => d.fecha === mesSeleccionado);
-
-  // Construir series por hora (y ventanas)
   const { etiquetas, original, iboca } = construirSeriesPorMes(datosMes);
 
-  // Graficar
-  graficarIBOCA("graficoIBOCA", etiquetas, iboca);
-  graficarOriginal("graficoOriginal", etiquetas, original);
+  graficarIBOCA("graficoIBOCA", etiquetas, iboca, mesSeleccionado);
+  graficarOriginal("graficoOriginal", etiquetas, original, mesSeleccionado);
 
-  // Análisis descriptivo por gráfica
   let analIBOCA = `Mes: ${mesSeleccionado}\n\n`;
   let analOrig  = `Mes: ${mesSeleccionado}\n\n`;
 
@@ -401,16 +472,14 @@ fetch("./historico_estaciones.geojson")
     datosUsme = data.features
       .filter(f => f.properties.estacion === "Usme")
       .map(f => ({
-        fecha_hora: f.properties.fecha_hora,              // "YYYY-MM-DDTHH:mm:ss" o "YYYY-MM-DD HH:mm"
-        fecha: f.properties.fecha_hora.substring(0, 7),   // "YYYY-MM"
+        fecha_hora: f.properties.fecha_hora,
+        fecha: f.properties.fecha_hora.substring(0, 7),
         contaminante: f.properties.contaminante,
         valor: parseFloat(f.properties.valor)
       }));
 
-    // Ordenar por tiempo por si acaso
     datosUsme.sort((a, b) => (a.fecha_hora < b.fecha_hora ? -1 : 1));
 
-    // Poblar selector de meses
     const mesesDisponibles = [...new Set(datosUsme.map(d => d.fecha))].sort();
     const selector = document.getElementById("selectorFecha");
     mesesDisponibles.forEach(m => {
@@ -422,7 +491,6 @@ fetch("./historico_estaciones.geojson")
 
     selector.addEventListener("change", () => actualizarGraficas(selector.value));
 
-    // Inicializar con el primer mes
     if (mesesDisponibles.length > 0) {
       actualizarGraficas(mesesDisponibles[0]);
     }
