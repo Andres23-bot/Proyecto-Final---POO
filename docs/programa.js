@@ -33,34 +33,170 @@ fetch("./Limite_barrio_Marichuela.geojson")
     L.geoJSON(data, { style: { color: "red", weight: 2, fillOpacity: 0.1 } }).addTo(mapa);
   });
 
-async function cargarDatosOpenAQ() {
-  const url = 'https://api.openaq.org/v2/latest?city=Bogota&parameter=pm25&parameter=pm10&parameter=no2&parameter=o3&parameter=so2&parameter=co&limit=100';
-  const proxy = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+// =========================
+// Configuración estaciones
+// =========================
+const estacionesTiempoReal = [
+  { nombre: "PUR IED Tenerife Ext", id: "A409489" },
+  { nombre: "PUR IED CervantesSa Ext", id: "A409270" },
+  { nombre: "PUR IED NEsperanza Ext", id: "A409309" },
+  { nombre: "PUR IED Atabanzha Ext", id: "A411472" },
+  { nombre: "PUR IED BrasiliaU Ext", id: "A411670" },
+  { nombre: "PUR IED Ochoa Ext", id: "A409183" },
+  { nombre: "PUR IED LosTejares Ext", id: "A416026" },
+  { nombre: "Usme (general)", id: "A521266" },
+  { nombre: "PUR IED CVillavicen Ext", id: "A415819" }
+];
 
-  try {
-    const resp = await fetch(proxy);
-    const data = await resp.json();
-    
-    data.results.forEach(est => {
-      console.log('Estación:', est.location);
-      console.log('Coordenadas:', est.coordinates);
-      
-      const info = ["pm25","pm10","no2","o3","so2","co"].map(p => {
-        const m = est.measurements.find(x => x.parameter === p);
-        return m ? m.value : '-';
-      });
-      
-      console.log('Valores (PM2.5, PM10, NO2, O3, SO2, CO):', info);
-    });
-    
-  } catch(err) {
-    console.error('Error al cargar OpenAQ:', err);
+// =========================
+// Configuración contaminantes
+// =========================
+const contaminantesTiempoReal = {
+  co: "CO",       // Monóxido de Carbono
+  o3: "O3",       // Ozono
+  no2: "NO2",     // Dióxido de Nitrógeno
+  pm10: "PM10",   // Material Particulado PM10
+  pm25: "PM2.5",  // Material Particulado PM2.5
+  so2: "SO2"      // Dióxido de Azufre
+};
+
+// =========================
+// Token AQICN
+// =========================
+const tokenTiempoReal = "e6b8169748351f258b15a84ada2884c71f8cd388"; // tu token real
+
+// =========================
+// Cargar datos
+// =========================
+async function cargarAQICNTiempoReal() {
+  const tbody = document.querySelector("#tablaTiempoReal tbody");
+  tbody.innerHTML = ""; // limpiar antes de cargar
+
+  for (const est of estacionesTiempoReal) {
+    const fila = document.createElement("tr");
+
+    // Primera celda: nombre de la estación
+    const celdaNombre = document.createElement("td");
+    celdaNombre.textContent = est.nombre;
+    fila.appendChild(celdaNombre);
+
+    try {
+      const datos = await obtenerDatosEstacionTiempoReal(est.id);
+
+      console.log(est.nombre, datos); // <-- Aquí ves todo lo que devuelve la API
+
+      // Agregar contaminantes
+      for (const clave in contaminantesTiempoReal) {
+        const celda = document.createElement("td");
+        if (datos && datos[clave] && datos[clave].v !== undefined) {
+          celda.textContent = datos[clave].v; // Último valor reportado
+        } else {
+          celda.textContent = "-";
+        }
+        fila.appendChild(celda);
+      }
+    } catch (error) {
+      console.error(`Error al cargar ${est.nombre}:`, error);
+
+      // Mostrar "sin dato" en caso de error
+      for (let i = 0; i < Object.keys(contaminantesTiempoReal).length; i++) {
+        const celda = document.createElement("td");
+        celda.textContent = "sin dato";
+        fila.appendChild(celda);
+      }
+    }
+
+    tbody.appendChild(fila);
   }
 }
 
-cargarDatosOpenAQ();
+// =========================
+// Obtener datos estación
+// =========================
+async function obtenerDatosEstacionTiempoReal(stationId) {
+  const url = `https://api.waqi.info/feed/@${stationId}/?token=${tokenTiempoReal}`;
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error("Error API");
+
+  const data = await resp.json();
+  if (data.status !== "ok") throw new Error("Respuesta inválida");
+
+  return data.data.iaqi; // <-- Objeto con todos los contaminantes reportados
+}
+
+// =========================
+// Auto-cargar al abrir
+// =========================
+cargarAQICNTiempoReal().then(actualizarMapaCalor);
+
+// Coordenadas aproximadas de las estaciones (puedes ajustar si tienes datos precisos)
+const coordenadasEstaciones = {
+  "PUR IED Tenerife Ext": [4.50773618959105, -74.11565196342099],
+  "PUR IED CervantesSa Ext": [4.5125732200364554, -74.1170487196042],
+  "PUR IED NEsperanza Ext": [4.513891525594909, -74.09041658986686],
+  "PUR IED Atabanzha Ext": [4.507681261360938, -74.11797609088494],
+  "PUR IED BrasiliaU Ext": [4.517611265083233, -74.11627178441178],
+  "PUR IED Ochoa Ext": [4.502507000692587, -74.10750612781402],
+  "PUR IED LosTejares Ext": [4.512984523486406, -74.10838674457717],
+  "Usme (general)": [4.531206, -74.111714],
+  "PUR IED CVillavicen Ext": [4.4871954112928725, -74.10256501972859]
+};
 
 
+let capaCalor; // variable global para la capa de calor
+
+// Función para actualizar el mapa de calor
+function actualizarMapaCalor() {
+  const contaminante = document.getElementById("selectorContaminante").value;
+  if (contaminante === "none") {
+    if (capaCalor) mapa.removeLayer(capaCalor);
+    return;
+  }
+
+  const tabla = document.querySelector("#tablaTiempoReal tbody");
+  const datosCalor = [];
+
+  const keysContaminantes = Object.values(contaminantesTiempoReal);
+  const idx = keysContaminantes.indexOf(contaminante);
+  if (idx === -1) return; // Si el contaminante no coincide, salir
+
+  for (const fila of tabla.rows) {
+    const nombre = fila.cells[0].textContent;
+    let valorCelda = fila.cells[idx + 1].textContent; // +1 porque la primera columna es nombre
+
+    // Convertir a número y reemplazar comas si existen
+    let valNum = parseFloat(valorCelda.replace(",", "."));
+    if (isNaN(valNum)) continue; // ignorar si no es número
+
+    const coords = coordenadasEstaciones[nombre];
+    if (coords) {
+      datosCalor.push([...coords, valNum]);
+    }
+  }
+console.log("Datos para heatmap:", datosCalor);
+  // Crear o actualizar capa de calor
+  if (capaCalor) mapa.removeLayer(capaCalor);
+  if (datosCalor.length > 0) {
+capaCalor = L.heatLayer(datosCalor, {
+    radius: 80, // antes 40
+    blur: 50,   // antes 25
+    maxZoom: 17,
+    gradient: {0.2: 'blue', 0.4: 'lime', 0.6: 'yellow', 0.8: 'orange', 1: 'red'}
+}).addTo(mapa);
+  }
+}
+
+// Evento al cambiar el selector
+document.getElementById("selectorContaminante").addEventListener("change", actualizarMapaCalor);
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Llama a la función para que se dibuje el heatmap al cargar la página
+  actualizarMapaCalor();
+});
 // --- Variables globales ---
 let datosUsme = [];
 let charts = {};

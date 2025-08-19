@@ -120,3 +120,47 @@ body {
 #tablaAQICN tr:nth-child(even) {
   background-color: #f2f2f2;
 }
+
+#contenedorTablaTiempoReal {
+  margin: 20px auto;
+  max-width: 900px;
+  overflow-x: auto;
+}
+
+#tablaTiempoReal {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+#tablaTiempoReal th, #tablaTiempoReal td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#tablaTiempoReal th {
+  background-color: #4CAF50;
+  color: white;
+  position: sticky;
+  top: 0;
+}
+
+#tablaTiempoReal tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#tablaTiempoReal tr:hover {
+  background-color: #ddd;
+}
+celda-sin-dato {
+  background-color: #d3d3d3; /* gris claro */
+  font-size: 0.8em;           /* letra más pequeña */
+  text-align: center;
+}
+#tablaTiempoReal td.celda-sin-dato {
+  background-color: #d3d3d3; /* gris claro */
+  font-size: 0.7em !important; /* fuerza tamaño menor */
+  text-align: center;
+  padding: 4px; /* menos padding para que sea más compacto */
+}

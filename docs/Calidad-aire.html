@@ -13,6 +13,8 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+
 </head>
 <body>
   <!-- Franja del título -->
@@ -77,31 +79,39 @@
 <!-- Selector de contaminante para mapa de calor -->
 <div style="margin-top: 15px; text-align:center;">
   <label for="selectorContaminante"><h3>🌡️ Selecciona Contaminante para Mapa de Calor:</h3></label>
-  <select id="selectorContaminante">
-    <option value="none">Ninguno</option>
-    <option value="CO">CO</option>
-    <option value="O3">O3</option>
-    <option value="NO2">NO2</option>
-    <option value="PM10">PM10</option>
-    <option value="PM2.5">PM2.5</option>
-    <option value="SO2">SO2</option>
-  </select>
+<select id="selectorContaminante">
+  <option value="none">Seleccione un contaminante</option>
+  <option value="CO">CO</option>
+  <option value="O3">O3</option>
+  <option value="NO2">NO2</option>
+  <option value="PM10">PM10</option>
+  <option value="PM2.5">PM2.5</option>
+  <option value="SO2">SO2</option>
+</select>
 </div>
 
-<!-- Tabla dinámica de datos -->
-<div style="margin-top: 15px;">
-  <h3>📋 Datos en tiempo real</h3>
-  <table id="tablaAQICN" border="1" style="width:100%; border-collapse: collapse;">
-    <thead>
-      <tr>
-        <th>Estación</th>
-        <th>Contaminante</th>
-        <th>Valor</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
+ <h1>Medición en Tiempo Real AQICN</h1>
+
+  <!-- Tabla de contaminantes -->
+  <div id="contenedorTablaTiempoReal">
+    <table id="tablaTiempoReal">
+      <thead>
+        <tr>
+          <th>Estación</th>
+          <th>CO</th>
+          <th>O3</th>
+          <th>NO2</th>
+          <th>PM10</th>
+          <th>PM2.5</th>
+          <th>SO2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Aquí se llenan los datos vía JS -->
+      </tbody>
+    </table>
+  </div>
+
 
       <h1> ⏳ Datos Históricos</h1>
       <label for="selectorFecha"><h3> 👇🏼 Selecciona Mes y Año 📅: </h3></label>
