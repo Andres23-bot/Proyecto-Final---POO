@@ -33,6 +33,34 @@ fetch("./Limite_barrio_Marichuela.geojson")
     L.geoJSON(data, { style: { color: "red", weight: 2, fillOpacity: 0.1 } }).addTo(mapa);
   });
 
+async function cargarDatosOpenAQ() {
+  const url = 'https://api.openaq.org/v2/latest?city=Bogota&parameter=pm25&parameter=pm10&parameter=no2&parameter=o3&parameter=so2&parameter=co&limit=100';
+  const proxy = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+
+  try {
+    const resp = await fetch(proxy);
+    const data = await resp.json();
+    
+    data.results.forEach(est => {
+      console.log('Estación:', est.location);
+      console.log('Coordenadas:', est.coordinates);
+      
+      const info = ["pm25","pm10","no2","o3","so2","co"].map(p => {
+        const m = est.measurements.find(x => x.parameter === p);
+        return m ? m.value : '-';
+      });
+      
+      console.log('Valores (PM2.5, PM10, NO2, O3, SO2, CO):', info);
+    });
+    
+  } catch(err) {
+    console.error('Error al cargar OpenAQ:', err);
+  }
+}
+
+cargarDatosOpenAQ();
+
+
 // --- Variables globales ---
 let datosUsme = [];
 let charts = {};

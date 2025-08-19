@@ -105,3 +105,18 @@ body {
 .contenido-colapsable.activo {
   max-height: 2000px; /* valor grande para cubrir todo el contenido */
 }
+
+#selectorContaminante {
+  margin: 10px 0;
+  padding: 5px;
+  font-size: 18px;
+}
+
+#tablaAQICN th, #tablaAQICN td {
+  padding: 8px;
+  text-align: center;
+}
+
+#tablaAQICN tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
