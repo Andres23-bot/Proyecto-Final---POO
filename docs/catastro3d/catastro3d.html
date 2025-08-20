@@ -9,8 +9,8 @@
   <style>
    /* Franja de título */
     #franja-titulo {
-      background-color: #e68f2b;
-      color: white;
+      background-color: #d6ccbf;
+      color: rgb(0, 0, 0);
       text-align: center;
       font-size: 38px;
       font-weight: bold;
@@ -86,7 +86,7 @@
   }
 
   .beneficio-controles button {
-    background: #df7008;
+    background: #eea826;
     color: white;
     border: none;
     padding: 6px 8px;
@@ -99,6 +99,42 @@
   .beneficio-controles button:hover {
     background: #1565c0;
   }
+  .franja-contenido {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.icono-izq {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.titulo-centro {
+  font-size: 38px;
+  font-weight: bold;
+}
+
+.btn-inicio {
+  position: absolute;
+  right: 20px;
+  top: 20%;
+  transform: translateY(-50%);
+  background: #cfae7d;
+  color: white;
+  font-size: 45px;
+  font-weight: bold;
+  padding: 6px 18px;
+  border-radius: 12px;
+  text-decoration: none;
+}
+
+.btn-inicio:hover {
+  background: #d8af72;
+}
 
     /* Columna derecha - Cesium */
     .columna-mapa {
@@ -135,9 +171,21 @@
 
 <body>
   <!-- Franja del título -->
-  <div id="franja-titulo">
-    Catastro 3D <img src="https://www.icde.gov.co/sites/default/files/2021-09/datos_icon_azules2_03.png" width="50" height="50" />
+<div id="franja-titulo">
+  <div class="franja-contenido">
+    <!-- Ícono izquierda -->
+    <img src="../img/logo2.png" width="230" height= "55" class="icono-izq">
+
+    <!-- Texto y logo centrados -->
+    <div class="titulo-centro">
+      Catastro 3D 
+      <img src="https://www.icde.gov.co/sites/default/files/2021-09/datos_icon_azules2_03.png" width="50" height="50" />
+    </div>
+
+    <!-- Botón Inicio derecha -->
+    <a href="../index.html" class="btn-inicio">⌂</a>
   </div>
+</div>
 
   <!-- Layout: Texto izquierda / Mapa derecha -->
   <div class="contenido-principal">

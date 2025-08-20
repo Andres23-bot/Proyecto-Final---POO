@@ -1,0 +1,36 @@
+.franja-contenido {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.icono-izq {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.titulo-centro {
+  font-size: 38px;
+  font-weight: bold;
+}
+
+.btn-inicio {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #d87f1f;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 6px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.btn-inicio:hover {
+  background: #b7640f;
+}
