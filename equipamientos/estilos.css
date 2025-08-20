@@ -1,59 +1,57 @@
+/* Fuente y reset básico */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  color: #333;
 }
 
+/* Encabezado */
 h1 {
-    text-align: center;
-    margin: 10px 0;
+  text-align: center;
+  background: #004d40;
+  color: white;
+  margin: 0;
+  padding: 2%;
+  font-size: 2vw; /* escala con el ancho de la pantalla */
 }
 
+/* Contenedor principal: mapa + panel */
 #contenedor {
-    display: flex;
-    height: 600px;
+  display: flex;
+  flex-direction: row;
+  height: 90vh; /* ocupa el 90% de la altura de la ventana */
 }
 
+/* Estilo del mapa */
 #map {
-    flex: 3;
+  flex: 2;
+  height: 100%;
+  border-right: 0.4% solid #004d40;
 }
 
+/* Panel de información */
 #infoPanel {
-    flex: 1;
-    background: #f9f9f9;
-    border-left: 2px solid #ccc;
-    padding: 10px;
-    overflow-y: auto;
+  flex: 1;
+  padding: 2%;
+  background: #e0f2f1;
+  overflow-y: auto;
 }
 
-#infoPanel img {
-    max-width: 100%;
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
-.carousel {
-    display: flex;
-    flex-direction: column; /* Imagen arriba, botones abajo */
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+#infoPanel h2 {
+  margin-top: 0;
+  color: #004d40;
+  font-size: 1.5vw;
 }
 
-.carousel-controls {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+#foto {
+  margin-top: 5%;
+  text-align: center;
 }
 
-.carousel-controls button {
-    background: #0077cc;
-    border: none;
-    color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.carousel-controls button:hover {
-    background: #005fa3;
+#foto img {
+  max-width: 90%;
+  border-radius: 5%;
+  box-shadow: 0 2% 4% rgba(0,0,0,0.3);
 }

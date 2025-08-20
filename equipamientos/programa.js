@@ -114,7 +114,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             panel.innerHTML = `
                                 <h3>Detalles del lugar</h3>
                                 <p><b>Nombre:</b> ${feature.properties.NGeNombre}</p>
-                                <p><b>Clasificación:</b> ${feature.properties.NGeClasifi}</p>
                                 <p><b>Fuente:</b> ${feature.properties.NGeFuente}</p>
                                 ${fotosHtml}
                             `;
