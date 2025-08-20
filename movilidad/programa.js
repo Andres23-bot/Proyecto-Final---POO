@@ -54,6 +54,7 @@ fetch('rutasSITP_marichuela.geojson')
             <p><b>Nombre:</b> ${feature.properties.nombre_par}</p>
             <p><b>Código:</b> ${feature.properties.cenefa_par}</p>
             <p><b>Dirección:</b> ${feature.properties.direccion_}</p>
+            <p><b>Rutas:</b> ${feature.properties.rutas}</p>
             <img src="${feature.properties.foto}" alt="Imagen del paradero" style="max-width: 100%; height: auto;" />
         `;
     } else {
