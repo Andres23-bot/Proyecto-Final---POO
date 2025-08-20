@@ -1,0 +1,59 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+    margin: 10px 0;
+}
+
+#contenedor {
+    display: flex;
+    height: 600px;
+}
+
+#map {
+    flex: 3;
+}
+
+#infoPanel {
+    flex: 1;
+    background: #f9f9f9;
+    border-left: 2px solid #ccc;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+#infoPanel img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+.carousel {
+    display: flex;
+    flex-direction: column; /* Imagen arriba, botones abajo */
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.carousel-controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.carousel-controls button {
+    background: #0077cc;
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.carousel-controls button:hover {
+    background: #005fa3;
+}
