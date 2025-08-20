@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  
+  <title>Catastro 3D</title>
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.132/Build/Cesium/Cesium.js"></script>
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.132/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
+  <style>
+   /* Franja de título */
+    #franja-titulo {
+      background-color: #e68f2b;
+      color: white;
+      text-align: center;
+      font-size: 38px;
+      font-weight: bold;
+      padding: 12px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f5f5f5;
+      overflow-x: hidden;
+    }
+
+    /* Layout principal: texto izquierda, Cesium derecha */
+    .contenido-principal {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 80px; /* deja espacio para la franja de título fija */
+      padding: 20px;
+      gap: 20px;
+    }
+
+    /* Columna izquierda - texto */
+    .columna-texto {
+      flex: 1;
+      max-width: 40%;
+    }
+
+    .texto {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      font-size: 1.0em;
+      color: #263238;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      padding: 20px 25px;
+    }
+
+      .beneficio-box {
+    background: #fff9ed;
+    border-left: 8px solid #e9ae55;
+    border-radius: 12px;
+    padding: 20px;
+    min-height: 140px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+    font-size: 1.0em;
+    color: #263238;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+    transition: opacity 0.5s ease-in-out;
+    max-width: 700px;   /* ancho máximo de la caja */
+    margin: 0 auto;     /* la centra horizontalmente */
+  }
+
+  .beneficio-controles {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 12px;
+  }
+
+  .beneficio-controles button {
+    background: #df7008;
+    color: white;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.7em;
+    transition: background 0.3s;
+  }
+
+  .beneficio-controles button:hover {
+    background: #1565c0;
+  }
+
+    /* Columna derecha - Cesium */
+    .columna-mapa {
+      flex: 1;
+      max-width: 60%;
+      display: flex;
+      justify-content: center;
+    }
+    #cesiumContainer {
+      width: 100%;
+      height: 85vh;
+      border-radius: 18px;
+      border: 6px solid;
+      border-image: linear-gradient(135deg, #e7bf0e 30%, #43a047 70%, #237fe7 100%) 1;
+      box-shadow: 0 6px 32px rgba(30,136,229,0.10);
+      background: white;
+    }
+
+    /* Responsivo: en pantallas pequeñas texto arriba, mapa abajo */
+    @media (max-width: 900px) {
+      .contenido-principal {
+        flex-direction: column;
+      }
+      .columna-texto, .columna-mapa {
+        max-width: 100%;
+      }
+      #cesiumContainer {
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+
+
+<body>
+  <!-- Franja del título -->
+  <div id="franja-titulo">
+    Catastro 3D <img src="https://www.icde.gov.co/sites/default/files/2021-09/datos_icon_azules2_03.png" width="50" height="50" />
+  </div>
+
+  <!-- Layout: Texto izquierda / Mapa derecha -->
+  <div class="contenido-principal">
+    <!-- Columna izquierda: texto -->
+    <div class="columna-texto">
+      <div class="texto">
+        <p>El <strong>catastro 3D</strong> es una innovación tecnológica que busca superar la representación bidimensional tradicional de la información catastral, mediante la construcción de modelos tridimensionales de edificaciones, predios y espacios urbanos. Esta aproximación permite una visión más completa y realista de la ciudad, lo cual resulta esencial en territorios densamente poblados como Bogotá.</p>
+        <p>En el marco del desarrollo de esta aplicación, <strong>AKA</strong> realizó un <strong>primer acercamiento en el barrio Marichuela</strong>, donde se trabajó en la <strong>extrusión</strong> de la capa de construcciones respecto a la cantidad de pisos. Este ejercicio permitió visualizar cómo los datos de altura enriquecen la comprensión del territorio y constituyen una base sólida para futuros desarrollos.</p>
+      </div>
+
+         <!-- Beneficios -->
+<div class="beneficios-container">
+  <div id="beneficio-box" class="beneficio-box">
+    <!-- Aquí se mostrará el beneficio -->
+  </div>
+  <div class="beneficio-controles">
+    <button id="prevBtn">◀ </button>
+    <button id="nextBtn">▶ </button>
+  </div>
+</div>
+
+      <div class="texto">
+        <p>La <strong>Unidad Administrativa Especial de Catastro Distrital (UAECD)</strong> ha comenzado a explorar el catastro 3D para enriquecer la gestión del territorio en Bogotá. En paralelo, nuestro acercamiento en <strong>Marichuela</strong> representa un primer paso hacia la consolidación de estas tecnologías, utilizando herramientas de visualización geoespacial que permiten proyectar el futuro de la ciudad de manera más clara y participativa.</p>
+        <p>En conclusión, el catastro 3D constituye una herramienta estratégica para el desarrollo urbano sostenible. Aunque nuestro proyecto en Marichuela fue solo un inicio, demuestra el gran potencial de esta tecnología para transformar la forma en que entendemos, gestionamos y proyectamos la ciudad.</p>
+      </div>
+    </div>
+
+    <!-- Columna derecha: mapa -->
+    <div class="columna-mapa">
+      <div id="cesiumContainer"></div>
+    </div>
+  </div>
+
+ 
+  <!-- APLICACIÓN DE CESIUM-->
+  <script type="module">
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0OTU5NWZjNC0wNzg1LTRjMjQtOTEzNS0xOTk2NDNhNjIwNTQiLCJpZCI6MzMxMzY5LCJpYXQiOjE3NTUwNDI1ODl9.bfQ2JufdXQOAiJn31JyUiKEHGJF5iooMHHus7wyAvSg';
+
+    const viewer = new Cesium.Viewer("cesiumContainer", {
+  terrainProvider: new Cesium.EllipsoidTerrainProvider(), // WGS84 plano
+  baseLayer: Cesium.ImageryLayer.fromProviderAsync(
+    Cesium.ArcGisMapServerImageryProvider.fromBasemapType(
+      Cesium.ArcGisBaseMapType.SATELLITE
+    )
+  ),
+  timeline: false,
+  animation: false,
+  shadows: true
+});
+    viewer.scene.globe.depthTestAgainstTerrain = true;
+
+    //1) Capa del barrio: SOLO para ubicar/recortar (sin extrusión)
+    const barrio = await Cesium.GeoJsonDataSource.load("Limite barrio_Marichuela.geojson", {
+    clampToGround: true
+    });
+    
+    viewer.dataSources.add(barrio);
+    for (const e of barrio.entities.values) {
+      if (!e.polygon) continue;
+      e.polygon.material = Cesium.Color.fromCssColorString("#1e88e5").withAlpha(0.25);
+      e.polygon.outline = true;
+      e.polygon.outlineColor = Cesium.Color.fromCssColorString("#0d47a1");
+    }
+    await viewer.flyTo(barrio);
+
+    // 2) PREDIOS: extrusión SOLO con CONNPISOS * 3
+    const predios = await Cesium.GeoJsonDataSource.load("Construcciones-Marichuela-pisos.geojson", {
+    // importante: SIN clampToGround si vas a extruir
+    });
+    viewer.dataSources.add(predios);
+
+    for (const e of predios.entities.values) {
+      const pol = e.polygon;
+      if (!pol) continue;
+
+      const props = e.properties || {};
+      const pisos = props.CONNPISOS ? +props.CONNPISOS.getValue() : 0;
+      const altura = pisos > 0 ? pisos * 3 : 0; // 3 metros por piso, si 0 queda 0
+
+
+      pol.material = Cesium.Color.fromCssColorString("#e55d1e").withAlpha(0.9);
+      pol.outline = true;
+      pol.outlineColor = Cesium.Color.RED;
+
+      pol.heightReference = Cesium.HeightReference.CLAMP_TO_GROUND;
+      pol.extrudedHeight = altura; // extrusión final en metros
+      pol.extrudedHeightReference = Cesium.HeightReference.RELATIVE_TO_GROUND;
+    }
+    
+    // 3) PARQUES: capa vectorial
+    const parques = await Cesium.GeoJsonDataSource.load("parques.geojson", {
+    clampToGround: true
+    });
+    viewer.dataSources.add(parques);
+
+    // Estilo para cada parque
+    for (const e of parques.entities.values) {
+      if (!e.polygon) continue;
+      e.polygon.material = Cesium.Color.fromCssColorString("#43a047").withAlpha(0.5); // verde semi-transparente
+      e.polygon.outline = true;
+      e.polygon.outlineColor = Cesium.Color.fromCssColorString("#1b5e20"); // borde verde oscuro
+    }
+
+
+    Cesium.GeoJsonDataSource.load("./Sitios-Interes.geojson", {
+      clampToGround: false
+    }).then(function(dataSource) {
+      viewer.dataSources.add(dataSource);
+      viewer.zoomTo(dataSource);
+
+      const entities = dataSource.entities.values;
+      for (let i = 0; i < entities.length; i++) {
+        const entity = entities[i];
+
+        // Obtener el valor del atributo "NGeNombre"
+        const nombre = entity.properties.NGeNombre.getValue();
+
+        // Configurar etiqueta
+        entity.label = new Cesium.LabelGraphics({
+          text: nombre,
+          font: "14px sans-serif",
+          fillColor: Cesium.Color.YELLOW,
+          outlineColor: Cesium.Color.BLACK,
+          outlineWidth: 2,
+          style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+          verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+          pixelOffset: new Cesium.Cartesian2(0, -10)
+        });
+
+        // Opcional: añadir un punto visible
+        entity.point = new Cesium.PointGraphics({
+          pixelSize: 15,
+          color: Cesium.Color.YELLOW,
+          heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND // flota relativo al suelo
+
+        });
+        // opcional: quitar el globo azul
+      entity.billboard = undefined;
+      }
+    });
+
+
+    // Recorta OSM a la envolvente del polígono del barrio
+    // (calculamos bbox a partir del primer polígono del barrio)
+    const poly = barrio.entities.values.find(e => e.polygon)?.polygon;
+    if (poly) {
+      const positions = poly.hierarchy.getValue().positions;
+      const toDeg = (c) => {
+        const carto = Cesium.Ellipsoid.WGS84.cartesianToCartographic(c);
+        return { lon: Cesium.Math.toDegrees(carto.longitude), lat: Cesium.Math.toDegrees(carto.latitude) };
+      };
+      let west=180, south=90, east=-180, north=-90;
+      positions.map(toDeg).forEach(({lon,lat}) => {
+        west = Math.min(west, lon);
+        east = Math.max(east, lon);
+        south= Math.min(south,lat);
+        north= Math.max(north,lat);
+      });
+      const rect = Cesium.Rectangle.fromDegrees(west, south, east, north);
+      osm.clippingPlanes = Cesium.ClippingPlaneCollection.fromBoundingRectangle(rect, {
+        unionClippingRegions: true,
+        edgeWidth: 0.0
+      });
+    }
+
+    // 4) Cámara inicial manual (por si lo prefieres)
+    viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(-74.17653, 4.59027, 300),
+      orientation: { heading: 0, pitch: Cesium.Math.toRadians(-25) }
+    });
+
+    // Después de agregar las capas y configurar sus estilos
+
+    // Haz zoom a la capa de construcciones (predios)
+    await viewer.flyTo(predios, {
+      offset: new Cesium.HeadingPitchRange(
+        0, // heading
+        Cesium.Math.toRadians(-25), // pitch
+        2000 // distancia (más cerca que antes)
+      )
+    });
+  </script>
+
+  <script>
+    const beneficios = [
+  {
+    titulo: "Mejor comprensión del espacio urbano",
+    descripcion: "Permite visualizar la ciudad en tres dimensiones, facilitando la identificación de problemas de ocupación del suelo, planificación de infraestructuras y desarrollo urbano.",
+    imagen: "img/01.png"
+  },
+  {
+    titulo: "Integración de datos",
+    descripcion: "Permite integrar datos alfanuméricos (como información sobre propietarios, usos del suelo, etc.) con la representación 3D de los objetos, generando una visión más completa de la realidad.",
+    imagen: "img/02.png"
+  },
+  {
+    titulo: "Planificación urbana más efectiva",
+    descripcion: "Facilita la evaluación de proyectos urbanísticos, la identificación de conflictos de uso del suelo y la optimización de la infraestructura urbana.",
+    imagen: "img/03.png"
+  },
+  {
+    titulo: "Mayor participación ciudadana",
+    descripcion: "Al visualizar la ciudad en 3D, se facilita la comprensión de los procesos urbanos y la participación de los ciudadanos en la toma de decisiones.",
+    imagen: "img/04.png"
+  },
+  {
+    titulo: "Herramienta para la toma de decisiones",
+    descripcion: "Los modelos 3D pueden ser utilizados por diferentes entidades (urbanismo, transporte, medio ambiente, etc.) para la toma de decisiones estratégicas.",
+    imagen: "img/05.png"
+  }
+];
+
+  let indice = 0;
+  const box = document.getElementById("beneficio-box");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+
+  // Mostrar beneficio
+function mostrarBeneficio(i) {
+  box.style.opacity = 0;
+  setTimeout(() => {
+    box.innerHTML = `
+      <div style="display:flex; align-items:flex-start; gap:18px;">
+        <img src="${beneficios[i].imagen}" alt="icono ${i+1}" width="90" height="80" style="flex-shrink:0;">
+        <div style="flex:1;">
+          <h3 style="margin:0; font-size:1.8em; color:#0d47a1;">${beneficios[i].titulo}</h3>
+          <p style="margin-top:6px; font-size:1em; color:#263238; line-height:1.5;">${beneficios[i].descripcion}</p>
+        </div>
+      </div>
+    `;
+    box.style.opacity = 1;
+  }, 400);
+}
+
+  // Inicial
+  mostrarBeneficio(indice);
+
+  // Botón siguiente
+  nextBtn.addEventListener("click", () => {
+    indice = (indice + 1) % beneficios.length;
+    mostrarBeneficio(indice);
+  });
+
+  // Botón anterior
+  prevBtn.addEventListener("click", () => {
+    indice = (indice - 1 + beneficios.length) % beneficios.length;
+    mostrarBeneficio(indice);
+  });
+
+  // Cambio automático cada 6 segundos
+  setInterval(() => {
+    indice = (indice + 1) % beneficios.length;
+    mostrarBeneficio(indice);
+  }, 6000);
+
+  </script>
+</body>
+</html>
