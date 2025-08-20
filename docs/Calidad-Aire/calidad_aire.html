@@ -14,13 +14,83 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+  <style>
+   /* Franja de título */
+    #franja-titulo {
+      background-color: #d6ccbf;
+      color: rgb(0, 0, 0);
+      text-align: center;
+      font-size: 38px;
+      font-weight: bold;
+      padding: 12px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+    }
+  .franja-contenido {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
 
+.icono-izq {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.titulo-centro {
+  font-size: 38px;
+  font-weight: bold;
+}
+
+.btn-inicio {
+  position: absolute;
+  right: 20px;
+  top: 20%;
+  transform: translateY(-50%);
+  background: #cfae7d;
+  color: white;
+  font-size: 45px;
+  font-weight: bold;
+  padding: 6px 18px;
+  border-radius: 12px;
+  text-decoration: none;
+}
+
+.btn-inicio:hover {
+  background: #d8af72;
+}
+
+
+
+
+  </style>
 </head>
 <body>
   <!-- Franja del título -->
-  <div id="franja-titulo">
-    Medición y Monitoreo de la Calidad del Aire <img src="https://www.miteco.gob.es/es/calidad-y-evaluacion-ambiental/temas/atmosfera-y-calidad-del-aire/_jcr_content/root/container/container-main/container-banner/teaser_list_copy/teaser67_copy_copy.coreimg.png/1745429364670/ica-movil-logo.png" width="50" height="50" />
+<div id="franja-titulo">
+  <div class="franja-contenido">
+    <!-- Ícono izquierda -->
+    <img src="../img/logo2.png" width="230" height= "55" class="icono-izq">
+
+    <!-- Texto y logo centrados -->
+    <div class="titulo-centro">
+      Catastro 3D 
+      <img src="../img/catastro3d.png" width="50" height="50" /> <!-- cambiar la palabra "imagen".png por el nombre de su pagina, ej: "vias.png" -->
+    </div>
+
+    <!-- Botón Inicio derecha -->
+    <a href="../index.html" class="btn-inicio">⌂</a>
   </div>
+</div>
+
+
   <div id="contenedor">
     <!-- Panel izquierdo -->
     <div id="panel-izquierdo">
