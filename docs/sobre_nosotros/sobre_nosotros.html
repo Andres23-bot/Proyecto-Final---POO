@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Sobre Nosotros - AKA Soluciones Geográficas</title>
+  <style>
+    /* Franja de título */
+    #franja-titulo {
+      background-color: #d6ccbf;
+      color: rgb(0, 0, 0);
+      text-align: center;
+      font-size: 38px;
+      font-weight: bold;
+      padding: 12px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f5f5f5;
+      overflow-x: hidden;
+    }
+
+    /* Layout principal: texto izquierda, fotos derecha */
+    .contenido-principal {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 80px;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    /* Columna izquierda - texto */
+    .columna-izquierda {
+      flex: 1;
+      max-width: 40%; /* AJUSTE: Cambia este valor para controlar el ancho del texto */
+    }
+
+    .texto {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      font-size: 0.8em;
+      color: #263238;
+      line-height: 1.6;
+      margin-bottom: 10px;
+      padding: 25px 30px; /* AJUSTE: Cambia estos valores para controlar el espacio interno */
+    }
+
+    .texto h2, .texto h3 {
+      color: #098613;
+      margin-bottom: 15px;
+    }
+
+    .texto ul {
+      margin-left: 20px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+    }
+
+    /* Columna derecha - fotos */
+    .columna-derecha {
+      flex: 1;
+      max-width: 60%; /* AJUSTE: Cambia este valor para controlar el ancho de las fotos */
+      display: flex;
+      align-items: center;
+    }
+
+    .fila-fotos {
+      display: flex;
+      gap: 15px; /* AJUSTE: Cambia este valor para controlar el espacio entre fotos */
+      width: 100%;
+    }
+
+    .recuadro-foto {
+      background: white;
+      border-radius: 12px;
+      padding: 15px; /* AJUSTE: Cambia este valor para controlar el espacio alrededor de cada foto */
+      text-align: center;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      flex: 1;
+      min-width: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .recuadro-foto img {
+      width: 100%;
+      height: 700px; /* AJUSTE: Cambia este valor para controlar la altura de las imágenes */
+      border-radius: 8px;
+      object-fit: cover;
+      border: 3px solid #e7bf0e;
+    }
+
+    .recuadro-foto h3 {
+      margin: 10px 0 5px 0;
+      color: #263238;
+      font-size: 1.1em;
+    }
+
+    .recuadro-foto p {
+      margin: 0;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    .franja-contenido {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .icono-izq {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .titulo-centro {
+      font-size: 38px;
+      font-weight: bold;
+    }
+
+    .btn-inicio {
+      position: absolute;
+      right: 20px;
+      top: 20%;
+      transform: translateY(-50%);
+      background: #cfae7d;
+      color: white;
+      font-size: 45px;
+      font-weight: bold;
+      padding: 6px 18px;
+      border-radius: 12px;
+      text-decoration: none;
+    }
+
+    .btn-inicio:hover {
+      background: #d8af72;
+    }
+
+    /* Responsivo */
+    @media (max-width: 900px) {
+      .contenido-principal {
+        flex-direction: column;
+      }
+      .columna-izquierda, .columna-derecha {
+        max-width: 100%;
+      }
+      .fila-fotos {
+        flex-direction: column;
+      }
+      .recuadro-foto {
+        min-width: 100%;
+      }
+      /* AJUSTES PARA MOBILE */
+      .recuadro-foto img {
+        height: 200px; /* Imágenes más altas en móviles */
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Franja del título -->
+  <div id="franja-titulo">
+    <div class="franja-contenido">
+      <!-- Ícono izquierda -->
+      <img src="../img/logo2.png" width="230" height="55" class="icono-izq">
+
+      <!-- Texto y logo centrados -->
+      <div class="titulo-centro">
+        Sobre nosotros
+      </div>
+
+      <!-- Botón Inicio derecha -->
+      <a href="../index.html" class="btn-inicio">⌂</a>
+    </div>
+  </div>
+
+  <!-- Layout: texto izquierda, fotos derecha -->
+  <div class="contenido-principal">
+    <!-- Columna izquierda: texto -->
+    <div class="columna-izquierda">
+      <div class="texto">
+        <h2>Sobre AKA - Soluciones Geográficas</h2>
+        <p><strong>AKA - Soluciones Geográficas</strong> desarrolla tecnologías innovadoras con SIG para generar productos catastrales y urbanos con enfoque social. Combinamos programación avanzada, análisis espacial y compromiso social para transformar la gestión del territorio.</p>
+      </div>
+
+      <div class="texto">
+        <h3>Misión y Visión</h3>
+        <p>Crear soluciones geográficas que integren tecnología y datos espaciales para mejorar la gestión del territorio y promover la equidad y participación ciudadana en el desarrollo urbano.
+        Ser líderes en soluciones geográficas con enfoque social en América Latina, transformando datos complejos en herramientas accesibles para comunidades e instituciones.</p>
+     
+    </div>
+     
+
+      <div class="texto">
+        <h3>Nuestros Productos</h3>
+        <ul>
+          <li><strong>Catastro 3D</strong>: Modelos tridimensionales para gestión urbana precisa</li>
+          <li><strong>Mapas de vulnerabilidad social</strong>: Identificación de zonas prioritarias</li>
+          <li><strong>Mapa interactivo de servicios comunitarios</strong>: Herramienta para visibilizar y fortalecer redes de apoyo en asentamientos informales</li>
+          <li><strong>Plataformas de participación ciudadana</strong>: Herramientas para co-creación urbana</li>
+          <li><strong>Análisis de acceso a servicios</strong>: Evaluación de cobertura de educación y salud</li>
+                    <li><strong>Modelos predictivos de expansión urbana</strong>: Simulaciones para prevenir la ocupación de zonas de riesgo</li>
+        </ul>
+      </div>
+
+      <div class="texto">
+        <h3>Experiencia</h3>
+        <p>Hemos desarrollado proyectos innovadores como el <strong>Catastro 3D para el barrio Marichuela</strong>, plataformas de seguimiento a políticas públicas y mapas interactivos de servicios comunitarios, siendo reconocidos por instituciones públicas y la comunidad académica.</p>
+      </div>
+    </div>
+
+    <!-- Columna derecha: fotos de fundadores en fila horizontal -->
+    <div class="columna-derecha">
+      <div class="fila-fotos">
+        <div class="recuadro-foto">
+          <img src="./img/foto1.jpg" alt="Nombre del Fundador 1">
+          <h3>Andrés Mayorga</h3>
+          <p>Ingeniero Topográfico</p>
+        </div>
+        
+        <div class="recuadro-foto">
+          <img src="./img/foto2.jpg" alt="Nombre del Fundador 2">
+          <h3>Katherine Villa</h3>
+          <p>Ingeniero Topográfica</p>
+        </div>
+        
+        <div class="recuadro-foto">
+          <img src="./img/foto3.jpg" alt="Nombre del Fundador 3">
+          <h3>Alejandra Chingate</h3>
+          <p>Ingeniera Catastral</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMENTARIOS PARA CONTROLAR TAMAÑOS -->
+  <script>
+    /*
+    CONTROL DE TAMAÑOS - INSTRUCCIONES:
+    
+    1. ANCHO DE SECCIONES:
+       - .columna-izquierda max-width: Cambia de 60% a otro valor (50%, 70%, etc.)
+       - .columna-derecha max-width: Cambia de 40% a otro valor (50%, 30%, etc.)
+    
+    2. ESPACIADO ENTRE ELEMENTOS:
+       - .contenido-principal gap: Cambia de 20px a otro valor
+       - .fila-fotos gap: Cambia de 15px para ajustar espacio entre fotos
+    
+    3. TAMAÑO DE IMÁGENES:
+       - .recuadro-foto img height: Cambia de 180px a otro valor (200px, 150px, etc.)
+    
+    4. ESPACIO INTERNO DE CAJAS:
+       - .texto padding: Cambia de 25px 30px
+       - .recuadro-foto padding: Cambia de 15px
+    
+    5. TAMAÑO DE FUENTES:
+       - .texto font-size: Cambia de 1.0em
+       - .recuadro-foto h3 font-size: Cambia de 1.1em
+    */
+  </script>
+</body>
+</html>

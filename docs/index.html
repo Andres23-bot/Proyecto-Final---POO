@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inicio - Plataforma Urbana</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      font-family: 'Arial', sans-serif;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* Contenedor general */
+    .page {
+      position: relative;
+      width: 100%;
+    }
+
+    /* Imagen principal */
+    .hero-image {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* === 🔧 MENÚ: ahora con elementos separados === */
+    .menu-container {
+      position: absolute;
+      top: 50px;           /* ✏️ Ajusta altura global del menú */
+      left:800px;            /* ✏️ Ajusta posición inicial desde la izquierda */
+      z-index: 10;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Espaciado individual entre elementos */
+    .dropdown, .nav-link {
+      margin-right: 80px;    /* ✏️ Ajusta el espacio ENTRE cada elemento */
+    }
+
+    /* Último elemento: quita margen derecho */
+    .dropdown:last-child,
+    .nav-link:last-child {
+      margin-right: 10;       /* ✅ Evita espacio extra al final */
+    }
+
+    /* Texto de menú */
+    .dropbtn {
+      color: black;           /* ✏️ COLOR del texto */
+      font-size: 30px;        /* ✏️ TAMAÑO del texto */
+      cursor: pointer;
+      padding: 10px 0;
+      transition: color 0.3s ease;
+    }
+
+    .dropbtn:hover {
+      color: #e0a910;
+    }
+
+    /* Menú desplegable */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.98);
+      min-width: 200px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+      overflow: hidden;
+      top: 100%;
+      left: 0;
+      z-index: 100;
+
+      opacity: 0;
+      transform: translateY(-10px) scale(0.95);
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      visibility: visible;
+    }
+
+    .dropdown-content a {
+      color: #333;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      font-size: 20px;
+      transition: background-color 0.3s;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* Enlaces directos */
+    .nav-link {
+      color: black;           /* ✏️ COLOR */
+      text-decoration: none;
+      font-size: 30px;        /* ✏️ TAMAÑO */
+      padding: 10px 0;
+      transition: color 0.3s;
+    }
+
+    .nav-link:hover {
+      color: #47c528;
+    }
+
+    /* === 🔧 BUSCADOR: independiente === */
+    .search-container {
+      position: absolute;
+      top: 700px;             /* ✏️ Ajusta altura */
+      left: 100px;              /* ✏️ Ajusta horizontal */
+      width: 100%;
+      max-width: 700px;
+      z-index: 10;
+    }
+
+    #buscador {
+      width: 100%;
+      padding: 15px 20px;
+      border: none;
+      border-radius: 30px;
+      font-size: 20px;
+      background-color: rgba(255, 255, 255, 0.95);
+      color: #289c38;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.18);
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    #buscador:focus {
+      transform: scale(1.02);
+    }
+
+    #buscador::placeholder {
+      color: #e7a30e; /* Buscador*/
+      font-style: italic;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .menu-container {
+        top: 600px;
+        left: 20px;
+      }
+
+      .dropdown, .nav-link {
+        margin-right:10px;   /* Menos espacio en móvil */
+      }
+
+      .dropbtn, .nav-link {
+        font-size: 16px;
+      }
+
+      .search-container {
+        top: 740px;
+        left: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <img src="img/inicio.png" alt="Imagen de inicio" class="hero-image" />
+
+    <!-- Menú con elementos separados horizontalmente -->
+    <div class="menu-container">
+      <div class="dropdown">
+        <span class="dropbtn">Explora</span>
+        <div class="dropdown-content">
+          <a href="ubicacion/ubicacion.html">Ubicación</a>
+          <a href="equipamientos/equipamientos.html">Equipamientos</a>
+          <a href="vias/vias.html">Vías</a>
+          <a href="movilidad/movilidad.html">Movilidad</a>
+          <a href="parques/parques.html">Parques</a>
+          <a href="catastro3d/catastro3d.html">Catastro 3D</a>
+          <a href="recorrido_virtual/recorrido_virtual.html">Recorrido Virtual</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <span class="dropbtn">Descubre</span>
+        <div class="dropdown-content">
+          <a href="calidad-aire/calidad_aire.html">Calidad del Aire</a>
+        </div>
+      </div>
+
+      <a href="sobre_nosotros/sobre_nosotros.html" class="nav-link">Sobre nosotros</a>
+    </div>
+
+    <!-- Buscador -->
+    <div class="search-container">
+      <input type="text" id="buscador" placeholder="Buscar contenido..." />
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('buscador').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const query = e.target.value.toLowerCase().trim();
+
+        const paginas = {
+          "ubicación": "ubicacion/ubicacion.html",
+          "equipamientos": "equipamientos/equipamientos.html",
+          "vías": "vias/vias.html",
+          "movilidad": "movilidad/movilidad.html",
+          "parques": "parques/parques.html",
+          "catastro 3d": "catastro3d/catastro3d.html",
+          "recorrido virtual": "recorrido_virtual/recorrido_virtual.html",
+          "calidad del aire": "calidad-aire/calidad_aire.html",
+          "sobre nosotros": "sobre_nosotros/sobre_nosotros.html",
+          "nuestro proyecto": "nuestro_proyecto/nuestro_proyecto.html"
+        };
+
+        for (const [key, url] of Object.entries(paginas)) {
+          if (query === key || query.includes(key)) {
+            window.location.href = url;
+            return;
+          }
+        }
+        alert("No se encontró una página relacionada con: " + query);
+      }
+    });
+  </script>
+</body>
+</html>
