@@ -37,7 +37,7 @@ let pitch = Cesium.Math.toRadians(-10);
 // Velocidades
 const SPEED_MPS = 2.0;
 const SAMPLE_STEP_M = 2.0;
-const ROT_RATE = 0.02;
+const ROT_RATE = 0.2;
 const TILT_RATE = 0.01;
 
 // === Utilidades ===
@@ -48,7 +48,30 @@ function setInitialView() {
     orientation: { heading: 0, pitch: Cesium.Math.toRadians(-15), roll: 0 },
   });
 }
+// === Cargar edificios ===
+async function loadBuildings() {
+  statusEl.textContent = "Cargando construcciones…";
+  const ds = await Cesium.GeoJsonDataSource.load(URL_GEOJSON_BUILDINGS, { clampToGround: false });
+  viewer.dataSources.add(ds);
 
+  for (const e of ds.entities.values) {
+    const pol = e.polygon;
+    if (!pol) continue;
+
+    const raw = e.properties?.CONNPISOS;
+    const pisos = Math.max(1, Number(raw?.getValue ? raw.getValue() : raw) || 1);
+    const altura = pisos * PISO_M;
+
+    pol.material = Cesium.Color.fromCssColorString("#e55d1e").withAlpha(0.9);
+    pol.outline = true;
+    pol.outlineColor = Cesium.Color.BLACK;
+    pol.heightReference = Cesium.HeightReference.CLAMP_TO_GROUND;
+    pol.extrudedHeight = altura;
+    pol.extrudedHeightReference = Cesium.HeightReference.RELATIVE_TO_GROUND;
+  }
+
+  statusEl.textContent = "Construcciones listas";
+}
 // Vista inicial que abarque todos los edificios y vías
 function flyToAllFeatures() {
   const entities = viewer.entities.values;
@@ -131,86 +154,70 @@ function setCameraAtPathIndex(i, alignHeadingToPath = false) {
   });
 }
 
-// === Cargar edificios ===
-async function loadBuildings() {
-  statusEl.textContent = "Cargando construcciones…";
-  const ds = await Cesium.GeoJsonDataSource.load(URL_GEOJSON_BUILDINGS, { clampToGround: false });
-  viewer.dataSources.add(ds);
-
-  for (const e of ds.entities.values) {
-    const pol = e.polygon;
-    if (!pol) continue;
-
-    const raw = e.properties?.CONNPISOS;
-    const pisos = Math.max(1, Number(raw?.getValue ? raw.getValue() : raw) || 1);
-    const altura = pisos * PISO_M;
-
-    pol.material = Cesium.Color.fromCssColorString("#e55d1e").withAlpha(0.9);
-    pol.outline = true;
-    pol.outlineColor = Cesium.Color.BLACK;
-    pol.heightReference = Cesium.HeightReference.CLAMP_TO_GROUND;
-    pol.extrudedHeight = altura;
-    pol.extrudedHeightReference = Cesium.HeightReference.RELATIVE_TO_GROUND;
-  }
-
-  statusEl.textContent = "Construcciones listas";
-}
-
 // === Cargar vías y labels siempre visibles ===
 let viasDataSource = null;
 async function loadVias() {
-  statusEl.textContent = "Cargando vías…";
-  viasDataSource = await Cesium.GeoJsonDataSource.load(URL_GEOJSON_VIAS, { clampToGround: true });
-  viewer.dataSources.add(viasDataSource);
+  try {
+    statusEl.textContent = "Cargando vías…";
+    viasDataSource = await Cesium.GeoJsonDataSource.load(URL_GEOJSON_VIAS, { clampToGround: true });
+    viewer.dataSources.add(viasDataSource);
 
-  for (const ent of viasDataSource.entities.values) {
-    if (ent.polyline) {
-      ent.polyline.width = 6.0;
-      ent.polyline.material = Cesium.Color.CYAN.withAlpha(0.85);
+    for (const ent of viasDataSource.entities.values) {
+      if (ent.polyline) {
+        ent.polyline.width = 6.0;
+        ent.polyline.material = Cesium.Color.CYAN.withAlpha(0.85);
 
-      if (ent.properties?.NOMBRE) {
-        const positions = ent.polyline.positions.getValue(Cesium.JulianDate.now());
-        if (positions.length >= 2) {
-          const midIndex = Math.floor(positions.length / 2);
-          const midPos = positions[midIndex];
+        if (ent.properties?.NOMBRE) {
+          let positions = ent.polyline.positions?.getValue(Cesium.JulianDate.now());
+          
+          if (positions && positions.length >= 2) {
+            const midIndex = Math.floor(positions.length / 2);
+            const midPos = positions[midIndex];
 
-          // Label siempre visible, elevado 5 m sobre la vía
-          viewer.entities.add({
-            position: new Cesium.Cartesian3(midPos.x, midPos.y, midPos.z + 5),
-            label: {
-              text: ent.properties.NOMBRE.getValue(),
-              font: "18px sans-serif",
-              fillColor: Cesium.Color.YELLOW,
-              outlineColor: Cesium.Color.BLACK,
-              outlineWidth: 2,
-              style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-              verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-              heightReference: Cesium.HeightReference.NONE, // no pegado al terreno
-              disableDepthTestDistance: Number.POSITIVE_INFINITY
+            if (midPos) {
+              viewer.entities.add({
+                position: Cesium.Cartesian3.fromElements(midPos.x, midPos.y, midPos.z + 8),
+                label: {
+                  text: ent.properties.NOMBRE.getValue(),
+                  font: "18px sans-serif",
+                  fillColor: Cesium.Color.YELLOW,
+                  outlineColor: Cesium.Color.BLACK,
+                  outlineWidth: 3,
+                  style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                  verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                  pixelOffset: new Cesium.Cartesian2(0, -6),
+                  heightReference: Cesium.HeightReference.NONE,
+                  disableDepthTestDistance: Number.POSITIVE_INFINITY // 🔑 siempre visible
+                }
+              });
             }
-          });
+          }
         }
       }
     }
-  }
 
-  const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
-  handler.setInputAction((click) => {
-    const picked = viewer.scene.pick(click.position);
-    if (Cesium.defined(picked) && picked.id && picked.id.polyline) {
-      const positions = picked.id.polyline.positions.getValue(Cesium.JulianDate.now());
-      if (positions && positions.length >= 2) {
-        activePath = densifyCartesian(positions, SAMPLE_STEP_M);
-        pathIndex = 0;
-        streetMode = true;
-        setCameraAtPathIndex(pathIndex, true);
-        statusEl.textContent = "Street ON (vías)";
+    const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+    handler.setInputAction((click) => {
+      const picked = viewer.scene.pick(click.position);
+      if (Cesium.defined(picked) && picked.id && picked.id.polyline) {
+        const positions = picked.id.polyline.positions?.getValue(Cesium.JulianDate.now());
+        if (positions && positions.length >= 2) {
+          activePath = densifyCartesian(positions, SAMPLE_STEP_M);
+          pathIndex = 0;
+          streetMode = true;
+          setCameraAtPathIndex(pathIndex, true);
+          statusEl.textContent = "Street ON (vías)";
+        }
       }
-    }
-  }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 
-  statusEl.textContent = "Vías listas. Haz clic en una vía.";
+    statusEl.textContent = "✅ Vías listas. Haz clic en una vía.";
+  } catch (err) {
+    console.error("❌ Error cargando vías:", err);
+    statusEl.textContent = "Error al cargar vías.";
+  }
 }
+
 
 // === Controles de teclado ===
 const keys = { forward:false, backward:false, left:false, right:false, lookUp:false, lookDown:false };

@@ -18,57 +18,6 @@ header .logo img {
   margin-right: 15px;
 }
 
-/* Menú */
-nav {
-  background: #34495e;
-}
-
-nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-}
-
-nav ul li {
-  position: relative;
-}
-
-nav ul li a,
-nav ul li {
-  display: block;
-  padding: 10px 15px;
-  color: white;
-  text-decoration: none;
-}
-
-nav ul li:hover {
-  background: #2c3e50;
-}
-
-.submenu {
-  display: none;
-  list-style-type: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #0056b3;
-  padding: 0;
-  z-index: 20;
-}
-
-.submenu li a {
-  padding: 8px;
-  background-color: #0056b3;
-  color: white;
-  border: 1px solid #ccc;
-  z-index: 20;
-}
-
-nav ul li:hover .submenu {
-  display: block;
-}
-
 /* Contenedor principal */
 #content {
   display: flex;
