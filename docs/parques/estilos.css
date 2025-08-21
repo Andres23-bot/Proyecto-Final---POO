@@ -1,0 +1,128 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #ecf0f1;
+}
+
+/* Encabezado */
+header {
+  display: flex;
+  align-items: center;
+  background: #2c3e50;
+  color: white;
+  padding: 10px;
+}
+
+header .logo img {
+  height: 40px;
+  margin-right: 15px;
+}
+
+/* Menú */
+nav {
+  background: #34495e;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+nav ul li {
+  position: relative;
+}
+
+nav ul li a,
+nav ul li {
+  display: block;
+  padding: 10px 15px;
+  color: white;
+  text-decoration: none;
+}
+
+nav ul li:hover {
+  background: #2c3e50;
+}
+
+.submenu {
+  display: none;
+  list-style-type: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #0056b3;
+  padding: 0;
+  z-index: 20;
+}
+
+.submenu li a {
+  padding: 8px;
+  background-color: #0056b3;
+  color: white;
+  border: 1px solid #ccc;
+  z-index: 20;
+}
+
+nav ul li:hover .submenu {
+  display: block;
+}
+
+/* Contenedor principal */
+#content {
+  display: flex;
+  height: calc(100vh - 100px); /* resta header + nav */
+  transition: all 0.3s ease;
+}
+
+/* Mapa */
+#map {
+  flex: 1;
+  transition: all 0.3s ease;
+}
+
+/* Panel de información */
+#info-panel {
+  width: 0;
+  padding: 0;
+  border-left: 2px solid #ccc;
+  overflow-y: auto;
+  background: #fff;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+#info-panel.active {
+  width: 40%;
+  padding: 20px;
+}
+
+#info-panel img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+#info-panel h2 {
+  color: #2c3e50;
+}
+
+/* Botón cerrar */
+#info-panel .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #c0392b;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1001;
+  line-height: 24px;
+  text-align: center;
+}
