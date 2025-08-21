@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mapa Sitios de Interés - Barrio Marichuela</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        /* Franja de título */
+        /* Franja de título */
+#franja-titulo {
+      background-color: #d6ccbf;
+      color: rgb(0, 0, 0);
+      text-align: center;
+      font-size: 38px;
+      font-weight: bold;
+      padding: 12px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+    }
+
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f5f5f5;
+            overflow-x: hidden;
+        }
+
+        /* Layout principal */
+        .contenido-principal {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 80px; /* espacio para la franja fija */
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* Columna izquierda - mapa */
+        .columna-mapa {
+            flex: 1;
+            max-width: 65%;
+            display: flex;
+            justify-content: center;
+        }
+
+        #map {
+            width: 100%;
+            height: 80vh;
+            border-radius: 18px;
+            border: 6px solid;
+            border-image: linear-gradient(135deg, #e7bf0e 30%, #43a047 70%, #237fe7 100%) 1;
+            box-shadow: 0 6px 32px rgba(30,136,229,0.10);
+            background: white;
+        }
+
+        /* Columna derecha - panel info */
+        .columna-info {
+            flex: 1;
+            max-width: 35%;
+        }
+
+        .panel {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            font-size: 1.0em;
+            color: #263238;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            padding: 20px 25px;
+        }
+
+        .panel h2 {
+            color: #0d47a1;
+        }
+
+        /* Botón inicio */
+        .btn-inicio {
+            position: absolute;
+            right: 20px;
+            top: 20%;
+            transform: translateY(-50%);
+            background: #cfae7d;
+            color: white;
+            font-size: 45px;
+            font-weight: bold;
+            padding: 6px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+        }
+
+        .btn-inicio:hover {
+            background: #d8af72;
+        }
+
+        /* Logo dentro de la franja */
+        .franja-contenido {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        }
+
+        .icono-izq {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        }
+
+        .titulo-centro {
+        font-size: 38px;
+        font-weight: bold;
+        }
+        .btn-inicio {
+        position: absolute;
+        right: 20px;
+        top: 20%;
+        transform: translateY(-50%);
+        background: #cfae7d;
+        color: white;
+        font-size: 45px;
+        font-weight: bold;
+        padding: 6px 18px;
+        border-radius: 12px;
+        text-decoration: none;
+        }
+
+        .btn-inicio:hover {
+        background: #d8af72;
+        }
+
+        @media (max-width: 900px) {
+            .contenido-principal {
+                flex-direction: column;
+            }
+            .columna-info, .columna-mapa {
+                max-width: 100%;
+            }
+            #map {
+                height: 400px;
+            }
+        }
+        /* Boton carrusel */
+
+  .beneficio-controles button {   /* cambiar "beneficio-controles" por el nombre que aparece antes de " button" */
+    background: #eea826;
+    color: white;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.7em;
+    transition: background 0.3s;
+  }
+
+  .beneficio-controles button:hover {  /* cambiar "beneficio-controles" por el nombre que aparece antes de " button" */
+    background: #f77b15;
+  }
+
+
+    </style>
+</head>
+<body>
+    <!-- Franja del título -->
+    <div id="franja-titulo">
+    <div class="franja-contenido">
+        <!-- Ícono izquierda -->
+        <img src="../img/logo2.png" width="230" height= "55" class="icono-izq">
+
+        <!-- Texto y logo centrados -->
+        <div class="titulo-centro">
+        Equipamientos 
+        <img src="../img/equipamientos.png" width="50" height="50" /> <!-- cambiar la palabra "imagen".png por el nombre de su pagina, ej: "vias.png" -->
+        </div>
+
+        <!-- Botón Inicio derecha -->
+        <a href="../index.html" class="btn-inicio">⌂</a>
+      </div>
+    </div>
+
+    <!-- Layout principal -->
+    <div class="contenido-principal">
+        <!-- Columna izquierda - mapa -->
+        <div class="columna-mapa">
+            <div id="map"></div>
+        </div>
+
+        <!-- Columna derecha - info panel -->
+        <div class="columna-info">
+            <div class="panel">
+                <h2>Detalles del lugar</h2>
+                <div id="foto" class="foto"></div>
+                <div id="rutas" class="rutas"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Script propio -->
+    <script src="programa.js"></script>
+</body>
+</html>
