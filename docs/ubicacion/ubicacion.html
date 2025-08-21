@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Barrio Marichuela</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    /* ===== Encabezado ===== */
+      /* Franja de título */
+#franja-titulo {
+      background-color: #d6ccbf;
+      color: rgb(0, 0, 0);
+      text-align: center;
+      font-size: 38px;
+      font-weight: bold;
+      padding: 12px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+    }
+
+  .franja-contenido {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.icono-izq {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.titulo-centro {
+  font-size: 38px;
+  font-weight: bold;
+}
+
+.btn-inicio {
+  position: absolute;
+  right: 20px;
+  top: 20%;
+  transform: translateY(-50%);
+  background: #cfae7d;
+  color: white;
+  font-size: 45px;
+  font-weight: bold;
+  padding: 6px 18px;
+  border-radius: 12px;
+  text-decoration: none;
+}
+
+.btn-inicio:hover {
+  background: #d8af72;
+}
+
+    /* ===== Layout principal ===== */
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f5f5f5;
+      height: 100%;
+    }
+    .contenido-principal {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 90px; /* deja espacio para el header */
+      padding: 20px;
+      gap: 20px;
+    }
+    .columna-texto {
+      flex: 1;
+      max-width: 35%;
+    }
+    .columna-mapa {
+      flex: 1;
+      max-width: 65%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ===== Tarjetas de texto ===== */
+    .texto {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      font-size: 1.0em;
+      color: #263238;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      padding: 20px 25px;
+    }
+
+    /* ===== Leaflet map ===== */
+    #map {
+      width: 100%;
+      height: 400px;
+      border-radius: 18px;
+      border: 6px solid;
+      border-image: linear-gradient(135deg, #e7bf0e 30%, #43a047 70%, #237fe7 100%) 1;
+      box-shadow: 0 6px 32px rgba(30,136,229,0.10);
+      background: white;
+    }
+
+    /* ===== Galería ===== */
+    #galeria {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      padding: 15px;
+    }
+    .carrusel {
+      position: relative;
+      overflow: hidden;
+      height: 250px;
+    }
+    .carrusel-imagen {
+      display: none;
+      text-align: center;
+    }
+    .carrusel-imagen.activa {
+      display: block;
+    }
+    .carrusel img {
+      max-height: 240px;
+      border-radius: 12px;
+    }
+    .controles {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+      gap: 15px;
+    }
+    .controles button {   /* cambiar "beneficio-controles" por el nombre que aparece antes de " button" */
+    background: #eea826;
+    color: white;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.7em;
+    transition: background 0.3s;
+  }
+
+  .controles button:hover {  /* cambiar "beneficio-controles" por el nombre que aparece antes de " button" */
+    background: #f77b15;
+  }
+
+    /* ===== Responsivo ===== */
+    @media (max-width: 900px) {
+      .contenido-principal {
+        flex-direction: column;
+      }
+      .columna-texto, .columna-mapa {
+        max-width: 100%;
+      }
+      #map {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Franja del título -->
+<div id="franja-titulo">
+  <div class="franja-contenido">
+    <!-- Ícono izquierda -->
+    <img src="../img/logo2.png" width="230" height= "55" class="icono-izq">
+
+    <!-- Texto y logo centrados -->
+    <div class="titulo-centro">
+      Ubicación
+      <img src="../img/ubicacion.png" width="50" height="50" /> <!-- cambiar la palabra "imagen".png por el nombre de su pagina, ej: "vias.png" -->
+    </div>
+
+    <!-- Botón Inicio derecha -->
+    <a href="../index.html" class="btn-inicio">⌂</a>
+  </div>
+</div>
+
+  <!-- Contenido principal -->
+  <div class="contenido-principal">
+    <!-- Columna izquierda -->
+    <div class="columna-texto">
+      <div class="texto">
+        <h3>Usme</h3>
+        <p>Usme es la localidad número 5 del Distrito Capital de Bogotá. Se encuentra ubicada en el suroriente de la ciudad. Fue un antiguo municipio de Cundinamarca hasta 1954, cuando se incorporó a la metrópoli. Está dividida en 7 UPZ con 279 barrios y 14 veredas.</p>
+        <ul>
+          <li>UPZ 52 - La Flora</li>
+          <li>UPZ 56 - Danubio</li>
+          <li>UPZ 57 - Gran Yomasa</li>
+          <li>UPZ 58 - Comuneros</li>
+          <li>UPZ 59 - Alfonso López</li>
+          <li>UPZ 61 - Ciudad Usme</li>
+          <li>UPZ 60 - Parque entre nubes</li>
+        </ul>
+        <p>El barrio La Marichuela se encuentra en el UPZ 58 - Comuneros, delimitado con Santa Librada, El Cortijo, Tenerife, La Fortaleza y La Aurora.</p>
+      </div>
+      <div class="texto">
+        <h3>La Marichuela</h3>
+        <p>La Marichuela es un barrio en Usme, Bogotá D.C., cerca de San Juan Bautista y Valles de Cafam.</p>
+      </div>
+    </div>
+
+    <!-- Columna derecha -->
+    <div class="columna-mapa">
+      <div id="map"></div>
+
+      <div id="galeria">
+        <h3>Galería de fotos</h3>
+        <div class="carrusel">
+          <div class="carrusel-imagen activa"><img src="imagenes/marichuela_2.jpg" alt="Foto 1"></div>
+          <div class="carrusel-imagen"><img src="imagenes/marichuela_2.jpg" alt="Foto 2"></div>
+          <div class="carrusel-imagen"><img src="imagenes/marichuela3.jpeg" alt="Foto 3"></div>
+          <div class="carrusel-imagen"><img src="imagenes/marichuela4.jpeg" alt="Foto 4"></div>
+        </div>
+        <div class="controles">
+          <button id="prev">◀</button>
+          <button id="next">▶</button>
+        </div>
+        <h3>Cómo llegar</h3>
+        <p>Puedes ver la mejor ruta en Google Maps:</p>
+        <a href="https://www.google.com/maps/dir//Barrio+Marichuela,+Bogotá"
+           target="_blank" class="btn">Ver en Google Maps</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Tu JS con el polígono -->
+  <script src="programa.js"></script>
+
+  <!-- Carrusel -->
+  <script>
+    const imgs = document.querySelectorAll('.carrusel-imagen');
+    let idx = 0;
+    function mostrar(i) {
+      imgs.forEach((img,j)=> img.classList.toggle('activa', j===i));
+    }
+    document.getElementById('next').onclick = ()=>{ idx = (idx+1)%imgs.length; mostrar(idx); };
+    document.getElementById('prev').onclick = ()=>{ idx = (idx-1+imgs.length)%imgs.length; mostrar(idx); };
+  </script>
+</body>
+</html>
