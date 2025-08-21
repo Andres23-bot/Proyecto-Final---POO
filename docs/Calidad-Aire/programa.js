@@ -13,30 +13,89 @@ const iconoEstacion = L.icon({
   iconAnchor: [20, 40],
   popupAnchor: [0, -40]
 });
+// --- Icono personalizado ---
+const iconoPUR = L.icon({
+  iconUrl: './img/PUR.png',
+  iconSize: [45, 65],
+  iconAnchor: [20, 40],
+  popupAnchor: [0, -40]
+});
 
 // Marcador estación Usme
 L.marker([4.531206, -74.111714], { icon: iconoEstacion }).addTo(mapa)
   .bindPopup(`
     <div style="text-align:center;">
       <h4>📡 Estación de Monitoreo de la calidad del aire</h4>
-      <img src='./Imagenes-andres/estaciones-monitoreo.jpg'
+      <img src='./img/estaciones-monitoreo.jpg'
            alt="Estación Usme"
            width="300" height="150" />
       <p>Estación de Usme</p>
     </div>
   `);
 
+// Marcador estaciones PUR
+L.marker([4.50773618959105, -74.11565196342099], { icon: iconoPUR }).addTo(mapa)
+.bindPopup(`
+    <div style="text-align:center;">
+      <h4>📡 PUR IED Tenerife Ext</h4>
+    </div>
+  `); 
+L.marker([4.5125732200364554, -74.1170487196042], { icon: iconoPUR }).addTo(mapa) 
+.bindPopup(`
+    <div style="text-align:center;">
+      <h4>📡 PUR IED CervantesSa Ext</h4>
+    </div>
+  `); 
+L.marker([4.513891525594909, -74.09041658986686], { icon: iconoPUR }).addTo(mapa)
+.bindPopup(`
+    <div style="text-align:center;">
+      <h4>📡 PUR IED NEsperanza Ext</h4>
+    </div>
+  `);  
+L.marker([4.507681261360938, -74.11797609088494], { icon: iconoPUR }).addTo(mapa) 
+.bindPopup(`
+    <div style="text-align:center;">
+      <h4>📡 PUR IED Atabanzha Ext</h4>
+    </div>
+  `); 
+L.marker([4.517611265083233, -74.11627178441178], { icon: iconoPUR }).addTo(mapa) 
+.bindPopup(`
+    <div style="text-align:center;">
+      <h4>📡 PUR IED BrasiliaU Ext</h4>
+    </div>
+  `); 
+L.marker([4.502507000692587, -74.10750612781402], { icon: iconoPUR }).addTo(mapa) 
+.bindPopup(`
+    <div style="text-align:center;">
+      <h4>📡 PUR IED Ochoa Ext</h4>
+    </div>
+  `); 
+L.marker([4.512984523486406, -74.10838674457717], { icon: iconoPUR }).addTo(mapa) 
+.bindPopup(`
+    <div style="text-align:center;">
+      <h4>📡 PUR IED LosTejares Ext</h4>
+    </div>
+  `); 
+L.marker([4.4871954112928725, -74.10256501972859], { icon: iconoPUR }).addTo(mapa) 
+.bindPopup(`
+    <div style="text-align:center;">
+      <h4>📡 PUR IED CVillavicen Ext</h4>
+    </div>
+  `); 
+
+
 // --- Cargar polígono de barrio ---
 fetch("./Limite_barrio_Marichuela.geojson")
   .then(res => res.json())
   .then(data => {
-    L.geoJSON(data, { style: { color: "red", weight: 2, fillOpacity: 0.1 } }).addTo(mapa);
+    L.geoJSON(data, { style: { color: "blue", weight: 2, fillOpacity: 0.1 } }).addTo(mapa);
   });
 
 // =========================
 // Configuración estaciones
 // =========================
 const estacionesTiempoReal = [
+  { nombre: "Usme (general)", id: "A521266" },
   { nombre: "PUR IED Tenerife Ext", id: "A409489" },
   { nombre: "PUR IED CervantesSa Ext", id: "A409270" },
   { nombre: "PUR IED NEsperanza Ext", id: "A409309" },
@@ -44,7 +103,6 @@ const estacionesTiempoReal = [
   { nombre: "PUR IED BrasiliaU Ext", id: "A411670" },
   { nombre: "PUR IED Ochoa Ext", id: "A409183" },
   { nombre: "PUR IED LosTejares Ext", id: "A416026" },
-  { nombre: "Usme (general)", id: "A521266" },
   { nombre: "PUR IED CVillavicen Ext", id: "A415819" }
 ];
 
@@ -131,6 +189,7 @@ cargarAQICNTiempoReal().then(actualizarMapaCalor);
 
 // Coordenadas aproximadas de las estaciones (puedes ajustar si tienes datos precisos)
 const coordenadasEstaciones = {
+  "Usme (general)": [4.531206, -74.111714],
   "PUR IED Tenerife Ext": [4.50773618959105, -74.11565196342099],
   "PUR IED CervantesSa Ext": [4.5125732200364554, -74.1170487196042],
   "PUR IED NEsperanza Ext": [4.513891525594909, -74.09041658986686],
@@ -138,7 +197,6 @@ const coordenadasEstaciones = {
   "PUR IED BrasiliaU Ext": [4.517611265083233, -74.11627178441178],
   "PUR IED Ochoa Ext": [4.502507000692587, -74.10750612781402],
   "PUR IED LosTejares Ext": [4.512984523486406, -74.10838674457717],
-  "Usme (general)": [4.531206, -74.111714],
   "PUR IED CVillavicen Ext": [4.4871954112928725, -74.10256501972859]
 };
 
@@ -148,42 +206,53 @@ let capaCalor; // variable global para la capa de calor
 // Función para actualizar el mapa de calor
 function actualizarMapaCalor() {
   const contaminante = document.getElementById("selectorContaminante").value;
-  if (contaminante === "none") {
-    if (capaCalor) mapa.removeLayer(capaCalor);
-    return;
-  }
+  if (contaminante === "none") return;
 
   const tabla = document.querySelector("#tablaTiempoReal tbody");
-  const datosCalor = [];
 
-  const keysContaminantes = Object.values(contaminantesTiempoReal);
-  const idx = keysContaminantes.indexOf(contaminante);
-  if (idx === -1) return; // Si el contaminante no coincide, salir
+  // Índice de la columna del contaminante
+  const keys = Object.values(contaminantesTiempoReal);
+  const idx = keys.indexOf(contaminante);
+  if (idx === -1) return;
+
+  const puntos = [];
 
   for (const fila of tabla.rows) {
     const nombre = fila.cells[0].textContent;
-    let valorCelda = fila.cells[idx + 1].textContent; // +1 porque la primera columna es nombre
-
-    // Convertir a número y reemplazar comas si existen
-    let valNum = parseFloat(valorCelda.replace(",", "."));
-    if (isNaN(valNum)) continue; // ignorar si no es número
+    const valTexto = fila.cells[idx + 1].textContent;
+    const valNum = parseFloat(valTexto.replace(",", "."));
+    if (isNaN(valNum)) continue;
 
     const coords = coordenadasEstaciones[nombre];
-    if (coords) {
-      datosCalor.push([...coords, valNum]);
+    if (!coords) continue;
+
+    // Leaflet.heat usa lat, lng, intensidad (opcional)
+    // Normalizamos intensidad para que esté entre 0 y 1
+    const intensidad = valNum / 300; // Ajusta según tu rango máximo esperado
+    puntos.push([coords[0], coords[1], intensidad]);
+  }
+
+  // Eliminar capa anterior si existe
+  if (window.capaCalor) {
+    mapa.removeLayer(window.capaCalor);
+  }
+
+  // Crear nuevo heatmap con interpolación
+  const capa = L.heatLayer(puntos, {
+    radius: 80,       // tamaño del área de influencia por punto
+    blur: 15,         // suavizado
+    max: 0.8,      // zoom máximo con efecto
+    gradient: {
+      0.0: 'green',
+      0.25: 'yellow',
+      0.5: 'orange',
+      0.75: 'red',
+      1.0: 'purple'
     }
-  }
-console.log("Datos para heatmap:", datosCalor);
-  // Crear o actualizar capa de calor
-  if (capaCalor) mapa.removeLayer(capaCalor);
-  if (datosCalor.length > 0) {
-capaCalor = L.heatLayer(datosCalor, {
-    radius: 80, // antes 40
-    blur: 50,   // antes 25
-    maxZoom: 17,
-    gradient: {0.2: 'blue', 0.4: 'lime', 0.6: 'yellow', 0.8: 'orange', 1: 'red'}
-}).addTo(mapa);
-  }
+  });
+
+  capa.addTo(mapa);
+  window.capaCalor = capa;
 }
 
 // Evento al cambiar el selector

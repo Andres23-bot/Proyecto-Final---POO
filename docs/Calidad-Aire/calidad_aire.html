@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
-
+  
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
@@ -67,7 +67,16 @@
   background: #d8af72;
 }
 
-
+    .texto {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      font-size: 1.0em;
+      color: #263238;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      padding: 20px 25px;
+    }
 
 
   </style>
@@ -81,8 +90,8 @@
 
     <!-- Texto y logo centrados -->
     <div class="titulo-centro">
-      Catastro 3D 
-      <img src="../img/catastro3d.png" width="50" height="50" /> <!-- cambiar la palabra "imagen".png por el nombre de su pagina, ej: "vias.png" -->
+      Calidad del aire
+      <img src="../img/calidad_aire.png" width="50" height="50" /> <!-- cambiar la palabra "imagen".png por el nombre de su pagina, ej: "vias.png" -->
     </div>
 
     <!-- Botón Inicio derecha -->
@@ -94,27 +103,21 @@
   <div id="contenedor">
     <!-- Panel izquierdo -->
     <div id="panel-izquierdo">
-          <img src="./img/IBOCA.png" width="460" height="320" class="imagen-derecha" />
+          <img src="./img/IBOCA.png" width="425" height="250" class="imagen-derecha" />
       
-      <p class="intro">
+      <p class="texto">
         Actualmente, Bogotá cuenta con una Red de Monitoreo de Calidad del Aire (RMCAB) conformada por 20 estaciones ubicadas en diferentes puntos estratégicos de la ciudad, que se encargan de vigilar las concentraciones de contaminantes. A continuación se muestran los datos históricos de la calidad del aire para el año 2022 registrados por la estación de monitoreo <strong>Usme</strong>. Esta red monitorea el material particulado de diámetro menor a 10 y 2.5 micras (PM10 y PM2.5). Adicionalmente, cuenta con la capacidad de vigilar la concentración de otros contaminantes como el ozono, los dióxidos de azufre y nitrógeno y el monóxido de carbono. En Bogotá se usa el IBOCA para la analizar estos datos.
       </p>
-      <p class="intro">
+      <p class="texto">
         <strong>La Red de Monitoreo de Bogotá  </strong>es un Sistema de Vigilancia de Calidad del Aire Tipo IV: Avanzado, que cumple con los lineamientos del Ministerio de Ambiente y Desarrollo Sostenible. Además, las estaciones las estaciones y equipos del Sistema de Vigilancia de Calidad del Aire cumplen con los estándares internacionales y aplica los procedimientos para garantizar la veracidad de los datos que se publican en tiempo real en los diferentes sitios web de la entidad.
             </p>
-      <p class="intro">
-        <strong>IBOCA</strong>.
-      </p>
-      <p class="intro">
+      
+      <p class="texto">
         El  <strong>IBOCA </strong><i>(Índice Bogotano de Calidad del Aire y Riesgo en Salud)</i> es una herramienta que comunica de manera sencilla el estado de la calidad del aire en Bogotá, los riesgos para la salud y las acciones necesarias para reducir la exposición a la contaminación.
-            </p>
-      <p class="intro">
-
-
-        
       </p>
+      
       <!-- Sección desplegable IBOCA -->
-<p class="intro">
+<p class="texto">
   <strong id="titulo-iboca" class="toggle-titulo">¿Cómo interpreto el IBOCA? ⬇️</strong>
 </p>
 
@@ -146,9 +149,11 @@
   </p>
 </div>
 
+ <h1> <img src="../img/01.png" width="60" height="50" /> Medición en Tiempo Real</h1>
+
 <!-- Selector de contaminante para mapa de calor -->
 <div style="margin-top: 15px; text-align:center;">
-  <label for="selectorContaminante"><h3>🌡️ Selecciona Contaminante para Mapa de Calor:</h3></label>
+  <label for="selectorContaminante"><h3>🌡️ Selecciona Contaminante para generar Mapa de Calor:</h3></label>
 <select id="selectorContaminante">
   <option value="none">Seleccione un contaminante</option>
   <option value="CO">CO</option>
@@ -159,8 +164,6 @@
   <option value="SO2">SO2</option>
 </select>
 </div>
-
- <h1>Medición en Tiempo Real AQICN</h1>
 
   <!-- Tabla de contaminantes -->
   <div id="contenedorTablaTiempoReal">
@@ -183,7 +186,7 @@
   </div>
 
 
-      <h1> ⏳ Datos Históricos</h1>
+      <h1> <img src="../img/02.png" width="60" height="50" /> Datos Históricos</h1>
       <label for="selectorFecha"><h3> 👇🏼 Selecciona Mes y Año 📅: </h3></label>
       <select id="selectorFecha"></select>
       <p class="intro"></p>
