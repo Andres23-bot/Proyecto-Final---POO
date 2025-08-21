@@ -239,8 +239,8 @@ function actualizarMapaCalor() {
 
   // Crear nuevo heatmap con interpolación
   const capa = L.heatLayer(puntos, {
-    radius: 80,       // tamaño del área de influencia por punto
-    blur: 15,         // suavizado
+    radius: 20,       // tamaño del área de influencia por punto
+    blur: 1,         // suavizado
     max: 0.8,      // zoom máximo con efecto
     gradient: {
       0.0: 'green',
