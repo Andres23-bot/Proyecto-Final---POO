@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mapa movilidad - Barrio Marichuela</title>
+  <link rel="stylesheet" href="estilos.css">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <style>
+  #franja-titulo {
+      background-color: #d6ccbf;
+      color: rgb(0, 0, 0);
+      text-align: center;
+      font-size: 38px;
+      font-weight: bold;
+      padding: 12px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+    }
+
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f5f5f5;
+      overflow-x: hidden;
+    }
+
+    /* Contenido principal */
+    .contenido-principal {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 90px; /* espacio para la franja fija */
+      padding: 20px;
+      gap: 20px;
+    }
+
+    /* Contenedor mapa */
+    #map {
+      flex: 2;
+      height: 600px;
+      border-radius: 18px;
+      border: 6px solid;
+      border-image: linear-gradient(135deg, #e7bf0e 30%, #43a047 70%, #237fe7 100%) 1;
+      box-shadow: 0 6px 32px rgba(30,136,229,0.10);
+      background: white;
+    }
+
+    /* Panel de info */
+    #infoPanel {
+      flex: 1;
+      max-width: 30%;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      font-size: 1em;
+      color: #263238;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    #infoPanel h2 {
+      color: #0d47a1;
+      font-size: 1.4em;
+      margin-top: 0;
+    }
+    #foto {
+      margin-top: 15px;
+      text-align: center;
+    }
+    #rutas {
+      margin-top: 15px;
+    }
+
+    /* Estilo franja contenido */
+    .franja-contenido {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.icono-izq {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.titulo-centro {
+  font-size: 38px;
+  font-weight: bold;
+}
+
+.btn-inicio {
+  position: absolute;
+  right: 20px;
+  top: 20%;
+  transform: translateY(-50%);
+  background: #cfae7d;
+  color: white;
+  font-size: 45px;
+  font-weight: bold;
+  padding: 6px 18px;
+  border-radius: 12px;
+  text-decoration: none;
+}
+
+.btn-inicio:hover {
+  background: #d8af72;
+}
+
+    /* Responsivo */
+    @media (max-width: 900px) {
+      .contenido-principal {
+        flex-direction: column;
+      }
+      #map, #infoPanel {
+        max-width: 100%;
+      }
+      #map {
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Franja del título -->
+  <!-- Franja del título -->
+<div id="franja-titulo">
+  <div class="franja-contenido">
+    <!-- Ícono izquierda -->
+    <img src="../img/logo2.png" width="230" height= "55" class="icono-izq">
+
+    <!-- Texto y logo centrados -->
+    <div class="titulo-centro">
+      Movilidad
+      <img src="../img/movilidad.png" width="50" height="50" /> <!-- cambiar la palabra "imagen".png por el nombre de su pagina, ej: "vias.png" -->
+    </div>
+
+    <!-- Botón Inicio derecha -->
+    <a href="../index.html" class="btn-inicio">⌂</a>
+  </div>
+</div>
+
+  <!-- Contenido principal -->
+  <div class="contenido-principal">
+    <div id="map"></div>
+    <div id="infoPanel">
+      <h2>Detalles del paradero</h2>
+      <div id="foto"></div>
+      <div id="rutas"></div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Script propio -->
+  <script src="programa.js"></script>
+</body>
+</html>
